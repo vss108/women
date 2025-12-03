@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Precautions Form</title>
+<style>
+  body { font-family: Arial; background: #ffe6f0; padding: 20px;}
+  form { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+  h2 { text-align:center; color:#cc0000; }
+  label { display:block; margin-top: 10px; }
+  input, select { width: 100%; padding:8px; margin-top:5px; border-radius:5px; border:1px solid #ccc; }
+  button { background: #ff4d88; color:white; padding:10px 20px; margin-top:20px; border:none; border-radius:5px; cursor:pointer; }
+  button:hover { background: #cc0055; }
+</style>
+</head>
+<body>
+
+<h2>Pregnancy Personal Condition Form</h2>
+<form action="/personalPrecautions" method="POST">
+
+<label>Full Name</label><input type="text" name="fullName" required>
+<label>Age</label><input type="number" name="age" required>
+<label>Weight (kg)</label><input type="number" name="weight" required>
+<label>Height (cm)</label><input type="number" name="height" required>
+<label>Contact Number</label><input type="text" name="contact" required>
+<label>Emergency Contact</label><input type="text" name="emergencyContact">
+
+<label>Gestational Age (weeks)</label><input type="number" name="gestationalAge">
+<label>Number of Pregnancies (Gravida)</label><input type="number" name="gravida">
+<label>Number of Births (Para)</label><input type="number" name="para">
+
+<label>Previous Pregnancy Complications</label>
+<select name="previousComplications">
+  <option value="No">No</option>
+  <option value="Yes">Yes</option>
+</select>
+
+<label>Chronic Conditions</label>
+<input type="text" name="chronicConditions">
+<label>Allergies</label><input type="text" name="allergies">
+<label>Current Medications</label><input type="text" name="medications">
+
+<label>Nausea/Vomiting</label>
+<select name="nausea">
+  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+</select>
+
+<label>Swelling (Hands/Feet/Face)</label>
+<select name="swelling">
+  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+</select>
+
+<label>Fatigue</label>
+<select name="fatigue">
+  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+</select>
+
+<label>Abdominal Pain/Cramps</label>
+<select name="cramps">
+  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+</select>
+
+<label>Shortness of Breath</label>
+<select name="breath">
+  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+</select>
+
+<label>Fetal Movements</label>
+<select name="fetalMovement">
+  <option>Normal</option><option>Reduced</option><option>Absent</option>
+</select>
+
+<label>Diet</label>
+<select name="diet"><option>Balanced</option><option>Needs Improvement</option></select>
+<label>Water Intake (glasses/day)</label><input type="number" name="waterIntake">
+<label>Exercise</label><select name="exercise"><option>Regular</option><option>Occasional</option><option>None</option></select>
+<label>Smoking/Alcohol/Drugs</label>
+<select name="smoking"><option>No</option><option>Yes</option></select>
+
+<label>Hemoglobin (g/dL)</label><input type="text" name="hemoglobin">
+<label>Blood Pressure (mmHg)</label><input type="text" name="bp">
+<label>Blood Sugar (mg/dL)</label><input type="text" name="sugar">
+<label>Urine Protein</label><select name="urine"><option>Negative</option><option>Positive</option></select>
+<label>Ultrasound Findings</label><input type="text" name="ultrasound">
+
+<label>Risk Level</label><select name="risk"><option>Low</option><option>Medium</option><option>High</option></select>
+<label>Suggestions / Precautions</label><input type="text" name="suggestions">
+<label>Next Appointment</label><input type="text" name="nextAppointment">
+
+<button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Care Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffcccc;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-right a {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            background-color: #ff6666;
+            transition: background 0.3s;
+        }
+
+        .top-right a:hover {
+            background-color: #ff4d4d;
+        }
+
+        main {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .image-section img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 40px 0;
+        }
+
+        .precautions {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: left;
+            background-color: #ffe6e6;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .precautions h2 {
+            text-align: center;
+            color: #cc0000;
+        }
+
+        .precautions ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Month Cards - 3 per row */
+        .month-development {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .month-card {
+            background-color: #fff0f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .month-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .month-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .month-card h3 {
+            color: #cc0000;
+            margin-bottom: 10px;
+        }
+
+        .month-card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .month-card {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .month-card {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Pregnancy Care</div>
+    <div class="top-right">
+        <!-- Updated to backend routes -->
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
+    </div>
+</header>
+
+<main>
+    <h1>Welcome to Pregnancy Care</h1>
+    <p>Your trusted platform for pregnancy health and guidance.</p>
+
+    <div class="image-section">
+        <img src="https://images.pexels.com/photos/2959172/pexels-photo-2959172.jpeg" alt="Pregnant Woman">
+    </div>
+
+    <div class="precautions">
+        <h2>Precautions During Pregnancy</h2>
+        <ul>
+            <li>Eat a balanced and nutritious diet.</li>
+            <li>Take prenatal vitamins as prescribed by your doctor.</li>
+            <li>Stay hydrated and drink plenty of water.</li>
+            <li>Exercise moderately as recommended.</li>
+            <li>Avoid alcohol, smoking, and harmful substances.</li>
+            <li>Get regular check-ups and follow medical advice.</li>
+            <li>Rest properly and manage stress.</li>
+        </ul>
+    </div>
+
+    <h2>Fetal Development Month by Month</h2>
+    <div class="month-development">
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/256567/pexels-photo-256567.jpeg" alt="Month 1">
+            <h3>Month 1</h3>
+            <p>Tiny heart starts beating ❤️</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/1190057/pexels-photo-1190057.jpeg" alt="Month 2">
+            <h3>Month 2</h3>
+            <p>Organs begin to form 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/2959172/pexels-photo-2959172.jpeg" alt="Month 3">
+            <h3>Month 3</h3>
+            <p>Baby can move arms & legs 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/256567/pexels-photo-256567.jpeg" alt="Month 4">
+            <h3>Month 4</h3>
+            <p>You might feel baby’s first kicks! 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/1190057/pexels-photo-1190057.jpeg" alt="Month 5">
+            <h3>Month 5</h3>
+            <p>Hair, eyebrows, and eyelashes grow 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/2959172/pexels-photo-2959172.jpeg" alt="Month 6">
+            <h3>Month 6</h3>
+            <p>Baby can respond to sounds 👂 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/256567/pexels-photo-256567.jpeg" alt="Month 7">
+            <h3>Month 7</h3>
+            <p>Brain and lungs keep developing 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/1190057/pexels-photo-1190057.jpeg" alt="Month 8">
+            <h3>Month 8</h3>
+            <p>Baby gains weight quickly 📅</p>
+        </div>
+        <div class="month-card">
+            <img src="https://images.pexels.com/photos/2959172/pexels-photo-2959172.jpeg" alt="Month 9">
+            <h3>Month 9</h3>
+            <p>Fully developed & ready to be born! 🎉</p>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>

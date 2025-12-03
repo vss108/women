@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Precautions</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+
+        header { background-color: #ffcccc; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+
+        .logo { font-size: 24px; font-weight: bold; color: #333; }
+
+        .top-right a, .top-right span {
+            text-decoration: none; padding: 8px 15px; border-radius: 5px; color: white; background-color: #ff6666; margin-left: 10px;
+        }
+
+        .top-right a.logout { background-color: #cc0000; }
+
+        main { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+
+        h1, h2 { text-align: center; color: #cc0000; margin-bottom: 40px; }
+
+        .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+
+        .card {
+            background-color: #fff0f0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 300px; padding: 20px; text-align: center; transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card h3 { color: #cc0000; margin-bottom: 10px; }
+        .card p { color: #555; font-size: 14px; }
+
+        @media (max-width:1000px){ .card{ width:45%; } }
+        @media (max-width:700px){ .card{ width:100%; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Pregnancy Care</div>
+    <div class="top-right">
+        <% if(name){ %>
+            <span>Welcome, <%= name %>!</span>
+            <a href="/personalPrecautions">Personal Precautions</a>
+            <a href="/logout" class="logout">Logout</a>
+        <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/signup">Signup</a>
+        <% } %>
+    </div>
+</header>
+
+<main>
+    <h1>Pregnancy Precautions</h1>
+
+    <h2>Month-wise Precautions</h2>
+    <div class="cards">
+        <div class="card"><h3>Month 1</h3><p>Early prenatal check-up, balanced diet, avoid alcohol & smoking.</p></div>
+        <div class="card"><h3>Month 2</h3><p>Start prenatal vitamins, monitor morning sickness, stay hydrated.</p></div>
+        <div class="card"><h3>Month 3</h3><p>Regular checkups, manage fatigue, avoid strenuous activity.</p></div>
+        <div class="card"><h3>Month 4</h3><p>Exercise lightly, dental checkup, monitor weight gain.</p></div>
+        <div class="card"><h3>Month 5</h3><p>Monitor fetal movement, balanced nutrition, rest adequately.</p></div>
+        <div class="card"><h3>Month 6</h3><p>Screen for gestational diabetes, stay active, take iron-rich foods.</p></div>
+        <div class="card"><h3>Month 7</h3><p>Attend prenatal classes, watch for swelling, manage back pain.</p></div>
+        <div class="card"><h3>Month 8</h3><p>Prepare for birth plan, monitor fetal growth, avoid heavy lifting.</p></div>
+        <div class="card"><h3>Month 9</h3><p>Hospital bag ready, final checkups, rest and stay hydrated.</p></div>
+    </div>
+
+    <h2>Other Precautions</h2>
+    <div class="cards">
+        <div class="card"><h3>Physical Changes</h3><p>Monitor weight gain, skin changes, swelling, and fatigue.</p></div>
+        <div class="card"><h3>Medical Care</h3><p>Regular checkups, vaccinations, lab tests, and prenatal monitoring.</p></div>
+        <div class="card"><h3>Self-Care</h3><p>Rest, stress management, hygiene, and balanced nutrition.</p></div>
+        <div class="card"><h3>Anemia</h3><p>Iron supplements, iron-rich foods, regular blood tests.</p></div>
+        <div class="card"><h3>Infections</h3><p>Avoid exposure, maintain hygiene, get timely treatment.</p></div>
+        <div class="card"><h3>Blood Clot Disorders</h3><p>Stay active, follow doctor advice, monitor symptoms.</p></div>
+        <div class="card"><h3>Urinary Tract Infections</h3><p>Hydrate, maintain hygiene, report symptoms early.</p></div>
+        <div class="card"><h3>Multiple Pregnancy</h3><p>Extra monitoring, nutrition, and rest for twins/multiples.</p></div>
+        <div class="card"><h3>Late/Postterm Pregnancy</h3><p>Monitor fetal movements, regular checkups, and labor planning.</p></div>
+    </div>
+</main>
+
+</body>
+</html>
