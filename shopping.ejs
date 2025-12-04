@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping - Pregnancy Care</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+
+        header { background-color: #ffcccc; padding: 15px 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+
+        .logo { font-size: 24px; font-weight: bold; color: #333; }
+
+        .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+
+        .top-right-links { display: flex; gap: 10px; align-items: center; }
+
+        .top-right a, .top-right span { text-decoration: none; padding: 8px 15px; border-radius: 5px; color: white; background-color: #ff6666; margin: 0; }
+
+        .top-right a.logout { background-color: #cc0000; }
+
+        .cart-icon-container { position: relative; display: inline-block; align-self: flex-end; }
+
+        .cart-icon { position: relative; font-size: 24px; cursor: pointer; }
+
+        .cart-badge { position: absolute; top: -8px; right: -8px; background-color: #ff3333; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+
+        .cart-dropdown { display: none; position: absolute; top: 40px; right: 0; background-color: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 500px; max-height: 500px; overflow-y: auto; z-index: 1000; }
+
+        .cart-dropdown.show { display: block; }
+
+        .cart-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px; }
+
+        .cart-item-card { background-color: #fff0f0; border: 1px solid #ddd; border-radius: 5px; padding: 8px; text-align: center; font-size: 11px; }
+
+        .cart-item-card strong { color: #cc0000; display: block; margin-bottom: 5px; }
+
+        .cart-item-card-price { color: #28a745; font-weight: bold; margin-bottom: 5px; }
+
+        .cart-item-remove { background-color: #cc0000; color: white; border: none; padding: 3px 6px; border-radius: 3px; cursor: pointer; font-size: 10px; width: 100%; }
+
+
+
+        main { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+
+        h1 { text-align: center; color: #cc0000; margin-bottom: 40px; }
+
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+
+        .product-card {
+            background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px; text-align: center; transition: transform 0.3s;
+        }
+
+        .product-card:hover { transform: translateY(-5px); }
+
+        .product-card h3 { color: #cc0000; margin-bottom: 10px; }
+
+        .product-card p { color: #555; font-size: 14px; margin: 10px 0; }
+
+        .price { font-size: 18px; font-weight: bold; color: #28a745; margin: 10px 0; }
+
+        .add-btn { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+
+        .add-btn:hover { background-color: #218838; }
+
+        .back-btn { display: inline-block; margin-bottom: 20px; padding: 8px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 5px; }
+
+        .back-btn:hover { background-color: #0052a3; }
+
+        .cart-summary { background-color: #fff0f0; padding: 15px; border-radius: 5px; margin-top: 30px; text-align: center; }
+
+        .cart-summary h2 { color: #cc0000; }
+
+        @media (max-width:700px){ .products-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Pregnancy Care Shopping</div>
+    <div class="top-right">
+        <% if(name){ %>
+            <div class="top-right-links">
+                <span>Welcome, <%= name %>!</span>
+                <a href="/precautions">Back to Precautions</a>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+        <% } else { %>
+            <a href="/login">Login</a>
+        <% } %>
+        <div class="cart-icon-container">
+            <div class="cart-icon" id="cartIconBtn">
+                🛒
+                <span class="cart-badge" id="cartBadge">0</span>
+            </div>
+            <div class="cart-dropdown" id="cartDropdown">
+                <div style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; color: #cc0000;">Your Cart (<span id="cartCountHeader">0</span> items)</div>
+                <div id="cartDropdownItems" style="max-height: 350px; overflow-y: auto;"></div>
+                <div style="padding: 10px; border-top: 1px solid #ddd; text-align: right;">
+                    <div id="cartDropdownTotal" style="font-weight: bold;">Total: ₹0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <a href="/precautions" class="back-btn">← Back</a>
+    
+    <h1>Pregnancy Care Products</h1>
+
+    <div class="products-grid">
+        <div class="product-card">
+            <h3>Prenatal Vitamins</h3>
+            <p>Essential vitamins and minerals for healthy pregnancy</p>
+            <div class="price">₹599</div>
+            <button class="add-btn" onclick="addToCart('Prenatal Vitamins', 599)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Maternity Pillow</h3>
+            <p>Comfortable support pillow for better sleep</p>
+            <div class="price">₹1,299</div>
+            <button class="add-btn" onclick="addToCart('Maternity Pillow', 1299)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Pregnancy Test Kit</h3>
+            <p>Accurate home pregnancy test kit (Pack of 2)</p>
+            <div class="price">₹199</div>
+            <button class="add-btn" onclick="addToCart('Pregnancy Test Kit', 199)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Stretch Mark Cream</h3>
+            <p>Natural cream to prevent and reduce stretch marks</p>
+            <div class="price">₹449</div>
+            <button class="add-btn" onclick="addToCart('Stretch Mark Cream', 449)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Maternity Belt</h3>
+            <p>Support belt to reduce back pain during pregnancy</p>
+            <div class="price">₹899</div>
+            <button class="add-btn" onclick="addToCart('Maternity Belt', 899)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Iron Supplement</h3>
+            <p>Iron-rich supplement to prevent anemia</p>
+            <div class="price">₹349</div>
+            <button class="add-btn" onclick="addToCart('Iron Supplement', 349)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Calcium Tablets</h3>
+            <p>Calcium supplements for bone health</p>
+            <div class="price">₹279</div>
+            <button class="add-btn" onclick="addToCart('Calcium Tablets', 279)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Pregnancy Journal</h3>
+            <p>Beautiful journal to track your pregnancy journey</p>
+            <div class="price">₹399</div>
+            <button class="add-btn" onclick="addToCart('Pregnancy Journal', 399)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Maternity Wear Set</h3>
+            <p>Comfortable and stylish maternity clothes (Set of 3)</p>
+            <div class="price">₹1,599</div>
+            <button class="add-btn" onclick="addToCart('Maternity Wear Set', 1599)">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="cart-summary">
+        <h2>Shopping Cart</h2>
+        <div id="cartItems" style="text-align: left; display: inline-block; max-width: 400px;">
+            <p id="emptyCart">Your cart is empty</p>
+        </div>
+        <div style="margin-top: 15px;">
+            <p id="cartTotal">Total: ₹0</p>
+            <button class="add-btn" onclick="checkout()" style="margin-top: 10px;">Proceed to Checkout</button>
+        </div>
+    </div>
+</main>
+
+<script>
+  // Initialize on page load
+  updateCartBadge();
+  updateCartDropdown();
+
+  // Cart icon click handler
+  document.getElementById('cartIconBtn').addEventListener('click', function() {
+    var dropdown = document.getElementById('cartDropdown');
+    dropdown.classList.toggle('show');
+    updateCartDropdown();
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    var cartIcon = document.getElementById('cartIconBtn');
+    var cartDropdown = document.getElementById('cartDropdown');
+    if (!cartIcon.contains(event.target) && !cartDropdown.contains(event.target)) {
+      cartDropdown.classList.remove('show');
+    }
+  });
+
+  function addToCart(productName, price) {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    cart.push({ product: productName, price: price });
+    localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    updateCartBadge();
+    updateCartDisplay();
+    updateCartDropdown();
+    alert(productName + ' added to cart!');
+  }
+
+  function updateCartBadge() {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    document.getElementById('cartBadge').textContent = cart.length;
+  }
+
+  function updateCartDropdown() {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    var itemsDiv = document.getElementById('cartDropdownItems');
+    var totalDiv = document.getElementById('cartDropdownTotal');
+    var countHeaderDiv = document.getElementById('cartCountHeader');
+
+    countHeaderDiv.textContent = cart.length;
+
+    if (cart.length === 0) {
+      itemsDiv.innerHTML = '<div style="padding: 10px; text-align: center; color: #999;">No items in cart</div>';
+      totalDiv.textContent = 'Total: ₹0';
+      return;
+    }
+
+    var html = '<div class="cart-grid">';
+    var total = 0;
+    cart.forEach(function(item, index) {
+      html += '<div class="cart-item-card">';
+      html += '<strong>' + item.product + '</strong>';
+      html += '<div class="cart-item-card-price">₹' + item.price + '</div>';
+      html += '<button class="cart-item-remove" onclick="removeFromCartDropdown(' + index + ')">Remove</button>';
+      html += '</div>';
+      total += item.price;
+    });
+    html += '</div>';
+    itemsDiv.innerHTML = html;
+    totalDiv.textContent = 'Total: ₹' + total;
+  }
+
+  function removeFromCartDropdown(index) {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    updateCartBadge();
+    updateCartDisplay();
+    updateCartDropdown();
+  }
+
+  function updateCartDisplay() {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    var cartItemsDiv = document.getElementById('cartItems');
+    var cartTotalDiv = document.getElementById('cartTotal');
+    var emptyCartMsg = document.getElementById('emptyCart');
+
+    if (cart.length === 0) {
+      cartItemsDiv.innerHTML = '';
+      emptyCartMsg.style.display = 'block';
+      cartTotalDiv.textContent = 'Total: ₹0';
+      return;
+    }
+
+    emptyCartMsg.style.display = 'none';
+    var html = '<ul style="list-style: none; padding: 0;">';
+    var total = 0;
+    cart.forEach(function(item, index) {
+      html += '<li style="padding: 5px 0; border-bottom: 1px solid #eee;">';
+      html += item.product + ' - ₹' + item.price;
+      html += ' <button onclick="removeFromCart(' + index + ')" style="background-color: #cc0000; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; float: right;">Remove</button>';
+      html += '</li>';
+      total += item.price;
+    });
+    html += '</ul>';
+    cartItemsDiv.innerHTML = html;
+    cartTotalDiv.textContent = 'Total: ₹' + total;
+  }
+
+  function removeFromCart(index) {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    updateCartBadge();
+    updateCartDisplay();
+    updateCartDropdown();
+  }
+
+  function checkout() {
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    if (cart.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    alert('Proceeding to checkout with ' + cart.length + ' item(s)!');
+    // Here you can add payment gateway integration
+  }
+
+  // Initialize cart display on page load
+  updateCartDisplay();
+</script>
+
+</body>
+</html>

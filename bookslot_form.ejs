@@ -52,9 +52,38 @@
       <label for="notes">Notes / Tests required</label>
       <textarea id="notes" name="notes" rows="3"><%= (form && form.notes) ? form.notes : '' %></textarea>
 
-      <button type="submit">Book Slot</button>
+      <button type="button" id="confirmBtn">Confirm Booking</button>
     </form>
   </div>
 </main>
+
+  <script>
+    document.getElementById('confirmBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      var name = document.getElementById('name').value;
+      var date = document.getElementById('date').value;
+      var time = document.getElementById('time').value;
+      var lab = '<%= lab.name %>';
+      var msg = 'Booking confirmed!\n\nLab: ' + lab + '\nName: ' + name + '\nDate: ' + date + '\nTime: ' + time;
+      alert(msg);
+      
+      // Save booking to localStorage
+      var bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+      bookings.push({
+        lab: lab,
+        name: name,
+        date: date,
+        time: time
+      });
+      localStorage.setItem('bookings', JSON.stringify(bookings));
+      
+      // First submit the form to save the booking
+      document.querySelector('form').submit();
+      // After submission, redirect to precautions
+      setTimeout(function() {
+        window.location.href = '/precautions';
+      }, 1000);
+    });
+  </script>
 </body>
 </html>

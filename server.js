@@ -181,7 +181,18 @@ app.get('/logout', (req, res) => {
 });
 
 // Precautions Page
-app.get('/precautions', (req,res) => res.render('precautions', { name: req.session.userName || null }));
+app.get('/precautions', async (req,res) => {
+  try {
+    const bookingCount = await Booking.countDocuments({});
+    res.render('precautions', { name: req.session.userName || null, bookingCount });
+  } catch (e) {
+    console.error('Error fetching booking count:', e);
+    res.render('precautions', { name: req.session.userName || null, bookingCount: 0 });
+  }
+});
+
+// Shopping Page
+app.get('/shopping', (req,res) => res.render('shopping', { name: req.session.userName || null }));
 
 // Personal Precautions Form Page
 app.get('/personalPrecautions', (req,res) => res.render('personalPrecautions'));
@@ -336,6 +347,21 @@ app.post('/book-slot',
   } catch (e) {
     console.error('Error processing booking:', e);
     res.status(500).send('Server error');
+  }
+});
+
+// Generic error handler — logs minimal info and returns generic message to clients
+app.use((err, req, res, next) => {
+  try {
+    console.error('Internal error:', err && err.message ? err.message : err);
+  } catch (e) {
+    console.error('Internal error: unknown');
+  }
+  // Send minimal error information (no stack traces or code)
+  if (req && req.accepts && req.accepts('html')) {
+    res.status(500).send('Internal server error.');
+  } else {
+    res.status(500).json({ error: 'Internal server error.' });
   }
 });
 

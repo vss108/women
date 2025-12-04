@@ -7,15 +7,35 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
 
-        header { background-color: #ffcccc; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        header { background-color: #ffcccc; padding: 15px 30px; display: flex; justify-content: space-between; align-items: flex-start; }
 
         .logo { font-size: 24px; font-weight: bold; color: #333; }
 
+        .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+
+        .top-right-links { display: flex; gap: 10px; align-items: center; }
+
         .top-right a, .top-right span {
-            text-decoration: none; padding: 8px 15px; border-radius: 5px; color: white; background-color: #ff6666; margin-left: 10px;
+            text-decoration: none; padding: 8px 15px; border-radius: 5px; color: white; background-color: #ff6666; margin: 0;
         }
 
         .top-right a.logout { background-color: #cc0000; }
+
+        .notification-bell { position: relative; font-size: 24px; cursor: pointer; margin-top: 10px; display: inline-block; }
+
+        .notification-badge { position: absolute; top: -8px; right: -8px; background-color: #ff3333; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+
+        .notification-dropdown { display: none; position: absolute; top: 50px; right: 0; background-color: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; max-height: 400px; overflow-y: auto; z-index: 1000; }
+
+        .notification-dropdown.show { display: block; }
+
+        .booking-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 12px; }
+
+        .booking-item strong { color: #cc0000; }
+
+        .booking-item:last-child { border-bottom: none; }
+
+
 
         main { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
 
@@ -43,11 +63,22 @@
     <div class="logo">Pregnancy Care</div>
     <div class="top-right">
         <% if(name){ %>
-            <span>Welcome, <%= name %>!</span>
-            <!-- Updated link to Stage 1 form -->
-            <a href="/stage1">Personal Precautions</a>
-            <a href="/doctor" class="bookslot">Book Slot</a>
-            <a href="/logout" class="logout">Logout</a>
+            <div class="top-right-links">
+                <span>Welcome, <%= name %>!</span>
+                <a href="/stage1">Personal Precautions</a>
+                <a href="/doctor" class="bookslot">Book Slot</a>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+            <div style="position: relative; display: inline-block; align-self: flex-end; display: flex; gap: 10px; align-items: center;">
+                <span class="notification-bell" id="notificationBell">
+                    🔔
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </span>
+                <span style="font-size: 24px; cursor: pointer;" onclick="window.location.href='/shopping'">🛒</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div id="bookingsList"><p style="padding: 10px; color: #999;">No bookings yet</p></div>
+                </div>
+            </div>
         <% } else { %>
             <a href="/login">Login</a>
             <a href="/signup">Signup</a>
@@ -84,6 +115,53 @@
         <div class="card"><h3>Late/Postterm Pregnancy</h3><p>Monitor fetal movements, regular checkups, and labor planning.</p></div>
     </div>
 </main>
+
+<script>
+  // Initialize notification badge on page load
+  (function() {
+    var bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    var badge = document.getElementById('notificationBadge');
+    if (badge) {
+      badge.textContent = bookings.length;
+    }
+  })();
+
+  document.getElementById('notificationBell').addEventListener('click', function() {
+    var dropdown = document.getElementById('notificationDropdown');
+    dropdown.classList.toggle('show');
+    displayBookings();
+  });
+
+  function displayBookings() {
+    var bookingsList = document.getElementById('bookingsList');
+    var bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    
+    if (bookings.length === 0) {
+      bookingsList.innerHTML = '<div class="booking-item">No bookings yet.</div>';
+      return;
+    }
+
+    var html = '';
+    bookings.forEach(function(booking, index) {
+      html += '<div class="booking-item">';
+      html += '<strong>' + booking.lab + '</strong><br>';
+      html += 'Name: ' + booking.name + '<br>';
+      html += 'Date: ' + booking.date + '<br>';
+      html += 'Time: ' + booking.time + '<br>';
+      html += '</div>';
+    });
+    bookingsList.innerHTML = html;
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    var bell = document.getElementById('notificationBell');
+    var dropdown = document.getElementById('notificationDropdown');
+    if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+</script>
 
 </body>
 </html>
