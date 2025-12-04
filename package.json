@@ -16,6 +16,10 @@
     "body-parser": "^2.2.1",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
-    "mongoose": "^9.0.0"
+    "mongoose": "^9.0.0",
+    "express-session": "^1.17.3",
+    "connect-mongo": "^4.6.0",
+    "nodemailer": "^6.9.3",
+    "express-validator": "^7.0.1"
   }
 }

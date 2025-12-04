@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pregnancy Care Labs</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; }
+    header { background: #ffcccc; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 700; color: #333; }
+    .top-right a { margin-left: 10px; text-decoration: none; color: #fff; padding: 8px 12px; border-radius: 6px; background: #0066cc; }
+    .top-right a.logout { background: #cc0000; }
+    main { max-width: 1100px; margin: 32px auto; padding: 0 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .card { background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); position: relative; }
+    .card h3 { margin: 0 0 6px; color: #004a99; }
+    .meta { color: #555; font-size: 14px; margin-bottom: 6px; }
+    .rating { color: #f39c12; margin-bottom: 10px; }
+    .reviews { font-size: 13px; color: #333; margin-bottom: 10px; }
+    .actions { display: flex; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
+    .actions a { text-decoration: none; padding: 8px 10px; border-radius: 6px; color: #fff; font-size: 14px; }
+    .actions a.book { background: #28a745; }
+    .actions a.call { background: #007bff; }
+    .actions a.chart { background: #ff9900; }
+    @media (max-width:700px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if (name) { %>
+      <span style="color:#333;margin-right:8px">Welcome, <%= name %></span>
+      <a href="/stage1">Start Personal Form</a>
+      <a href="/precautions">Precautions</a>
+      <a href="/logout" class="logout">Logout</a>
+    <% }  %>
+  </div>
+</header>
+
+<main>
+  <h1 style="text-align:center;color:#cc0000">Nearby Labs</h1>
+  <div class="grid">
+    <% if (Array.isArray(labs) && labs.length) { %>
+      <% labs.forEach(function(lab){ %>
+        <div class="card">
+          <h3><%= lab.name %></h3>
+          <div class="meta"><strong>Address:</strong> <%= lab.address %></div>
+          <div class="meta"><strong>Location:</strong> <%= lab.location %></div>
+          <div class="meta"><strong>Contact:</strong> <%= lab.phone || 'N/A' %>, <%= lab.email || 'N/A' %></div>
+          <div class="rating">
+            <% for(let i=1;i<=5;i++){ %>
+              <% if(i<=lab.rating){ %>★<% } else { %>☆<% } %>
+            <% } %> (<%= lab.rating %>/5)
+          </div>
+          <div class="reviews">
+            <% if(Array.isArray(lab.reviews) && lab.reviews.length){ %>
+              <% lab.reviews.slice(0,3).forEach(function(r){ %>
+                <p>• <%= r %></p>
+              <% }) %>
+            <% } else { %>
+              <p>No reviews yet.</p>
+            <% } %>
+          </div>
+          <div class="actions">
+            <a href="/book-slot/<%= lab._id %>" class="book">Book Slot</a>
+            <% if(lab.phone){ %>
+              <a href="tel:<%= lab.phone %>" class="call">Call</a>
+            <% } %>
+            <a href="/chart/<%= lab._id %>" class="chart">View Chart</a>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="card">
+        <p>No lab information available.</p>
+      </div>
+    <% } %>
+  </div>
+</main>
+</body>
+</html>

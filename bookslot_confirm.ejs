@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Booking Confirmed</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#f9f9f9;margin:0}
+    main{max-width:700px;margin:32px auto;padding:20px}
+    .card{background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .ok{color:#28a745;font-weight:700}
+  </style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <h2 class="ok">Booking Confirmed</h2>
+    <p>Your slot at <strong><%= lab.name %></strong> has been received.</p>
+    <ul>
+      <li><strong>Name:</strong> <%= booking.name %></li>
+      <li><strong>Phone:</strong> <%= booking.phone || 'N/A' %></li>
+      <li><strong>Email:</strong> <%= booking.email || 'N/A' %></li>
+      <li><strong>Date:</strong> <%= booking.date %></li>
+      <li><strong>Time:</strong> <%= booking.time %></li>
+      <li><strong>Notes:</strong> <%= booking.notes || '—' %></li>
+    </ul>
+    <p>Your booking has been saved. <strong>Reference ID:</strong> <%= booking._id %></p>
+    <% if (booking.email) { %>
+      <p>A confirmation has been sent to <strong><%= booking.email %></strong> (if email delivery is configured).</p>
+    <% } else { %>
+      <p>If you'd like email confirmations, add an email address when booking.</p>
+    <% } %>
+  </div>
+</main>
+</body>
+</html>
