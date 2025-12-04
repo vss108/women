@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stage 4 - Lifestyle & Lab</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f4ff; display:flex; justify-content:center; padding:20px; }
+.container { width:500px; background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+label { font-weight:bold; margin-top:8px; display:block; }
+input, select { width:100%; padding:8px; margin:5px 0 15px; border:1px solid #bbb; border-radius:5px; }
+.btn { padding:10px 18px; border:none; border-radius:5px; background:#0066cc; color:#fff; cursor:pointer; margin-right:10px; }
+.btn:hover { background:#004c99; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Stage 4 - Lifestyle & Lab Results</h2>
+<form action="/stage4" method="POST">
+
+<label>Sleep Duration (hrs/day):</label>
+<input type="number" name="sleep" value="<%= data.sleep || '' %>">
+
+<label>Physical Activity:</label>
+<select name="exercise">
+<option value="Low" <%= data.exercise==='Low'?'selected':'' %>>Low</option>
+<option value="Moderate" <%= data.exercise==='Moderate'?'selected':'' %>>Moderate</option>
+<option value="High" <%= data.exercise==='High'?'selected':'' %>>High</option>
+</select>
+
+<label>Hemoglobin (g/dL):</label>
+<input type="number" name="hemoglobin" value="<%= data.hemoglobin || '' %>">
+
+<label>Blood Pressure (mmHg):</label>
+<input type="text" name="bp" value="<%= data.bp || '' %>">
+
+<label>Blood Sugar (mg/dL):</label>
+<input type="text" name="sugar" value="<%= data.sugar || '' %>">
+
+<label>Urine Protein:</label>
+<select name="urine">
+<option value="Positive" <%= data.urine==='Positive'?'selected':'' %>>Positive</option>
+<option value="Negative" <%= data.urine==='Negative'?'selected':'' %>>Negative</option>
+</select>
+
+<label>Ultrasound Findings:</label>
+<input type="text" name="ultrasound" value="<%= data.ultrasound || '' %>">
+
+<button type="button" class="btn" onclick="window.location='/stage3'">Back</button>
+<button type="submit" class="btn">Submit</button>
+</form>
+</div>
+<script>
+(function(){
+  const form = document.querySelector('form');
+  const storageKey = 'multiStageData';
+  function collect(form){
+    const fd = new FormData(form);
+    const obj = {};
+    for(const [k,v] of fd.entries()){
+      if (obj[k] !== undefined) {
+        if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
+        obj[k].push(v);
+      } else obj[k] = v;
+    }
+    return obj;
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const current = collect(form);
+    const merged = Object.assign({}, saved, current);
+    // build a form and submit (server expects normal POST)
+    const f = document.createElement('form');
+    f.method = 'POST';
+    f.action = form.action || '/stage4';
+    Object.keys(merged).forEach(k=>{
+      const val = merged[k];
+      if(Array.isArray(val)){
+        val.forEach(v=>{
+          const inp = document.createElement('input');
+          inp.type = 'hidden'; inp.name = k; inp.value = v;
+          f.appendChild(inp);
+        });
+      } else {
+        const inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = k; inp.value = val;
+        f.appendChild(inp);
+      }
+    });
+    document.body.appendChild(f);
+    localStorage.removeItem(storageKey);
+    f.submit();
+  });
+  // prefill stage4 as well
+  (function prefill(){
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    if(!saved) return;
+    Object.keys(saved).forEach(k=>{
+      const els = form.querySelectorAll('[name="'+k+'"]');
+      if(!els.length) return;
+      els.forEach(el=>{
+        if(el.type === 'checkbox' || el.type === 'radio'){
+          if(Array.isArray(saved[k])) el.checked = saved[k].includes(el.value);
+          else el.checked = saved[k] === el.value;
+        } else el.value = saved[k];
+      });
+    });
+  })();
+})();
+</script>
+</body>
+</html>

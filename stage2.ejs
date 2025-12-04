@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stage 2 - Pregnancy Details</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f4ff; display:flex; justify-content:center; padding:20px; }
+.container { width:500px; background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+label { font-weight:bold; margin-top:8px; display:block; }
+input, select { width:100%; padding:8px; margin:5px 0 15px; border:1px solid #bbb; border-radius:5px; }
+.btn { padding:10px 18px; border:none; border-radius:5px; background:#0066cc; color:#fff; cursor:pointer; margin-right:10px; }
+.btn:hover { background:#004c99; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Stage 2 - Pregnancy Details</h2>
+<form action="/stage2" method="POST">
+
+<label>Gestational Age (Weeks):</label>
+<input type="number" name="weeks" value="<%= data.weeks || '' %>" required>
+
+<label>Number of Pregnancies (Gravida):</label>
+<input type="number" name="gravida" value="<%= data.gravida || '' %>">
+
+<label>Number of Births (Para):</label>
+<input type="number" name="para" value="<%= data.para || '' %>">
+
+<label>Previous Complications:</label><br>
+<input type="radio" name="complications" value="Yes" <%= data.complications==='Yes'?'checked':'' %>> Yes
+<input type="radio" name="complications" value="No" <%= (!data.complications || data.complications==='No')?'checked':'' %>> No<br>
+
+<label>If Yes, specify:</label>
+<input type="text" name="compdetails" value="<%= data.compdetails || '' %>">
+
+<button type="button" class="btn" onclick="window.location='/stage1'">Back</button>
+<button type="submit" class="btn">Next</button>
+</form>
+</div>
+<script>
+(function(){
+  const form = document.querySelector('form');
+  const storageKey = 'multiStageData';
+  function collect(form){
+    const fd = new FormData(form);
+    const obj = {};
+    for(const [k,v] of fd.entries()){
+      if (obj[k] !== undefined) {
+        if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
+        obj[k].push(v);
+      } else obj[k] = v;
+    }
+    return obj;
+  }
+  function save(obj){
+    const prev = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    localStorage.setItem(storageKey, JSON.stringify(Object.assign({}, prev, obj)));
+  }
+  function prefill(){
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    if(!saved) return;
+    Object.keys(saved).forEach(k=>{
+      const els = form.querySelectorAll('[name="'+k+'"]');
+      if(!els.length) return;
+      els.forEach(el=>{
+        if(el.type === 'checkbox' || el.type === 'radio'){
+          if(Array.isArray(saved[k])) el.checked = saved[k].includes(el.value);
+          else el.checked = saved[k] === el.value;
+        } else el.value = saved[k];
+      });
+    });
+  }
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    save(collect(form));
+    window.location = '/stage3';
+  });
+  document.addEventListener('DOMContentLoaded', prefill);
+})();
+</script>
+</body>
+</html>

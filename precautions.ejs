@@ -44,7 +44,9 @@
     <div class="top-right">
         <% if(name){ %>
             <span>Welcome, <%= name %>!</span>
-            <a href="/personalPrecautions">Personal Precautions</a>
+            <!-- Updated link to Stage 1 form -->
+            <a href="/stage1">Personal Precautions</a>
+            <a href="/doctor" class="doctor">Doctor</a>
             <a href="/logout" class="logout">Logout</a>
         <% } else { %>
             <a href="/login">Login</a>

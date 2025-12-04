@@ -1,1 +1,43 @@
-suggestions
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggestions</title>
+<style>
+  body { font-family: Arial; background: #ecf3fe; display: flex; justify-content: center; padding: 20px; }
+  .container { width: 500px; background: #fff; padding: 20px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  h2 { color: #004a99; text-align: center; }
+  p { margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Suggestions for <%= personal.fullName %></h2>
+
+<p><strong>Gestational Age:</strong> <%= personal.gestationalAge || 'N/A' %> weeks</p>
+
+<p><strong>Medical Conditions:</strong>
+  <%= (
+       (Array.isArray(personal.issues) && personal.issues.length && personal.issues.join(', '))
+       || (personal.medicalConditions && Array.isArray(personal.medicalConditions.issues) && personal.medicalConditions.issues.join(', '))
+       || 'None'
+     ) %>
+</p>
+
+<p><strong>Symptoms:</strong>
+  Nausea: <%= personal.nausea || (personal.symptoms && personal.symptoms.nausea) || 'N/A' %>,
+  Swelling: <%= personal.swelling || (personal.symptoms && personal.symptoms.swelling) || 'N/A' %>,
+  Pain: <%= personal.pain || (personal.symptoms && personal.symptoms.pain) || 'N/A' %>
+</p>
+
+<p><strong>Lifestyle:</strong>
+  Exercise: <%= personal.exercise || (personal.symptoms && personal.symptoms.exercise) || 'N/A' %>,
+  Sleep: <%= personal.sleep || (personal.symptoms && personal.symptoms.sleep) || 'N/A' %> hrs/day
+</p>
+
+</div>
+
+</body>
+</html>

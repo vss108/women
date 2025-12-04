@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctors</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#f9f9f9;margin:0}
+    header{background:#ffcccc;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-weight:700;color:#333}
+    .top-right a{margin-left:10px;text-decoration:none;color:#fff;padding:8px 12px;border-radius:6px;background:#0066cc}
+    .top-right a.logout{background:#cc0000}
+    main{max-width:1100px;margin:32px auto;padding:0 20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .card{background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .card h3{margin:0 0 6px;color:#004a99}
+    .meta{color:#555;font-size:14px;margin-bottom:10px}
+    .actions a{display:inline-block;margin-right:8px;padding:8px 10px;border-radius:6px;text-decoration:none;color:#fff;background:#0066cc}
+    .actions a.msg{background:#28a745}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if (name) { %>
+      <span style="color:#333;margin-right:8px">Welcome, <%= name %></span>
+      <a href="/stage1">Start Form</a>
+      <a href="/precautions">Precautions</a>
+      <a href="/logout" class="logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Signup</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1 style="text-align:center;color:#cc0000">Available Doctors</h1>
+
+  <div class="grid">
+    <% if (Array.isArray(doctors) && doctors.length) { %>
+      <% doctors.forEach(function(d){ %>
+        <div class="card">
+          <h3><%= d.name %></h3>
+          <div class="meta"><strong>Specialty:</strong> <%= d.specialty %> — <strong>Clinic:</strong> <%= d.clinic || 'N/A' %></div>
+          <div class="meta"><strong>Languages:</strong> <%= (d.languages || []).join(', ') || 'N/A' %></div>
+          <div class="meta"><strong>Next Available:</strong> <%= d.nextAvailable || 'Contact to schedule' %></div>
+          <div class="actions">
+            <% if (d.phone) { %>
+              <a href="tel:<%= d.phone %>">Call</a>
+            <% } %>
+            <% if (d.email) { %>
+              <a href="mailto:<%= d.email %>" class="msg">Email</a>
+            <% } %>
+            <% if (d.bookingUrl) { %>
+              <a href="<%= d.bookingUrl %>" target="_blank">Book</a>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <!-- sample fallback entries -->
+      <div class="card">
+        <h3>Dr. A. Kumar</h3>
+        <div class="meta"><strong>Specialty:</strong> Obstetrician & Gynecologist</div>
+        <div class="meta"><strong>Languages:</strong> English, Hindi</div>
+        <div class="actions">
+          <a href="tel:+911234567890">Call</a>
+          <a href="mailto:akumar@example.com" class="msg">Email</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dr. S. Rao</h3>
+        <div class="meta"><strong>Specialty:</strong> Maternal-Fetal Medicine</div>
+        <div class="meta"><strong>Languages:</strong> English</div>
+        <div class="actions">
+          <a href="tel:+919876543210">Call</a>
+          <a href="mailto:srao@example.com" class="msg">Email</a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</main>
+</body>
+</html>

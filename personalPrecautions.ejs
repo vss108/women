@@ -3,93 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personal Precautions Form</title>
+<title>Personal Precaution Form</title>
+
 <style>
-  body { font-family: Arial; background: #ffe6f0; padding: 20px;}
-  form { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
-  h2 { text-align:center; color:#cc0000; }
-  label { display:block; margin-top: 10px; }
-  input, select { width: 100%; padding:8px; margin-top:5px; border-radius:5px; border:1px solid #ccc; }
-  button { background: #ff4d88; color:white; padding:10px 20px; margin-top:20px; border:none; border-radius:5px; cursor:pointer; }
-  button:hover { background: #cc0055; }
+    body {
+        font-family: Arial, sans-serif;
+        background: #ecf3fe;
+        display: flex;
+        justify-content: center;
+        padding: 30px;
+    }
+    .container {
+        width: 520px;
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    h2 {
+        color: #004a99;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    label { font-weight: bold; }
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 6px 0 15px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+    }
+    .btn {
+        background: #0066cc;
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 6px;
+        margin-top: 10px;
+        cursor: pointer;
+        width: 48%;
+    }
+    .btn:hover { background: #0052a3; }
+    .step-page { display: none; }
+    .step-page.active { display: block; }
+    .btn-group { display: flex; justify-content: space-between; }
 </style>
+
 </head>
 <body>
 
-<h2>Pregnancy Personal Condition Form</h2>
-<form action="/personalPrecautions" method="POST">
+<div class="container">
+<form id="precautionForm" action="/submit-precautions" method="POST">
 
-<label>Full Name</label><input type="text" name="fullName" required>
-<label>Age</label><input type="number" name="age" required>
-<label>Weight (kg)</label><input type="number" name="weight" required>
-<label>Height (cm)</label><input type="number" name="height" required>
-<label>Contact Number</label><input type="text" name="contact" required>
-<label>Emergency Contact</label><input type="text" name="emergencyContact">
+<!-------------------------------------------------------- STEP 1 -------------------------------------------------------->
+<div class="step-page active">
+<h2>Personal Profile</h2>
 
-<label>Gestational Age (weeks)</label><input type="number" name="gestationalAge">
-<label>Number of Pregnancies (Gravida)</label><input type="number" name="gravida">
-<label>Number of Births (Para)</label><input type="number" name="para">
+<label>Full Name:</label>
+<input type="text" name="fullName" required>
 
-<label>Previous Pregnancy Complications</label>
-<select name="previousComplications">
-  <option value="No">No</option>
-  <option value="Yes">Yes</option>
+<label>Age:</label>
+<input type="number" name="age" required>
+
+<label>Weight (kg):</label>
+<input type="number" name="weight">
+
+<label>Height (cm):</label>
+<input type="number" name="height">
+
+<label>Blood Group:</label>
+<select name="blood">
+<option value="A+">A+</option>
+<option value="A-">A-</option>
+<option value="B+">B+</option>
+<option value="B-">B-</option>
+<option value="O+">O+</option>
+<option value="O-">O-</option>
+<option value="AB+">AB+</option>
+<option value="AB-">AB-</option>
 </select>
 
-<label>Chronic Conditions</label>
-<input type="text" name="chronicConditions">
-<label>Allergies</label><input type="text" name="allergies">
-<label>Current Medications</label><input type="text" name="medications">
+<label>Contact Number:</label>
+<input type="text" name="contact" required>
 
-<label>Nausea/Vomiting</label>
+<label>Emergency Contact:</label>
+<input type="text" name="emergency">
+
+<div class="btn-group">
+<button type="button" class="btn" onclick="nextPage()">Next</button>
+</div>
+</div>
+
+
+<!-------------------------------------------------------- STEP 2 -------------------------------------------------------->
+<div class="step-page">
+<h2>Pregnancy Details</h2>
+
+<label>Gestational Age (Weeks):</label>
+<input type="number" name="weeks" required>
+
+<label>Number of Pregnancies (Gravida):</label>
+<input type="number" name="gravida">
+
+<label>Number of Births (Para):</label>
+<input type="number" name="para">
+
+<label>Previous Complications:</label><br>
+<input type="radio" name="complications" value="Yes"> Yes
+<input type="radio" name="complications" value="No" checked> No<br>
+
+<label>If Yes, Specify:</label>
+<input type="text" name="compdetails">
+
+<div class="btn-group">
+<button type="button" class="btn" onclick="prevPage()">Back</button>
+<button type="button" class="btn" onclick="nextPage()">Next</button>
+</div>
+</div>
+
+
+<!-------------------------------------------------------- STEP 3 -------------------------------------------------------->
+<div class="step-page">
+<h2>Medical Conditions</h2>
+
+<label>Check Existing Issues:</label><br>
+<input type="checkbox" name="issue" value="Diabetes"> Diabetes<br>
+<input type="checkbox" name="issue" value="High Blood Pressure"> High BP<br>
+<input type="checkbox" name="issue" value="Anemia"> Anemia<br>
+<input type="checkbox" name="issue" value="Thyroid"> Thyroid<br>
+<input type="checkbox" name="issue" value="Infections"> Infections<br>
+<input type="checkbox" name="issue" value="UTI"> UTI<br>
+<input type="checkbox" name="issue" value="None" checked> None<br><br>
+
+<label>Current Medication:</label>
+<input type="text" name="medicine">
+
+<div class="btn-group">
+<button type="button" class="btn" onclick="prevPage()">Back</button>
+<button type="button" class="btn" onclick="nextPage()">Next</button>
+</div>
+</div>
+
+
+<!-------------------------------------------------------- STEP 4 -------------------------------------------------------->
+<div class="step-page">
+<h2>Symptoms & Lifestyle</h2>
+
+<label>Nausea:</label>
 <select name="nausea">
-  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+<option>None</option><option>Mild</option><option>Severe</option>
 </select>
 
-<label>Swelling (Hands/Feet/Face)</label>
+<label>Swelling:</label>
 <select name="swelling">
-  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+<option>None</option><option>Mild</option><option>Severe</option>
 </select>
 
-<label>Fatigue</label>
-<select name="fatigue">
-  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+<label>Abdominal Pain:</label>
+<select name="pain">
+<option>None</option><option>Mild</option><option>Severe</option>
 </select>
 
-<label>Abdominal Pain/Cramps</label>
-<select name="cramps">
-  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+<label>Sleep Duration (hrs/day):</label>
+<input type="number" name="sleep">
+
+<label>Physical Activity:</label>
+<select name="exercise">
+<option>Low</option><option>Moderate</option><option>High</option>
 </select>
 
-<label>Shortness of Breath</label>
-<select name="breath">
-  <option>None</option><option>Mild</option><option>Moderate</option><option>Severe</option>
-</select>
+<div class="btn-group">
+<button type="button" class="btn" onclick="prevPage()">Back</button>
+<button type="submit" class="btn">Submit</button>
+</div>
 
-<label>Fetal Movements</label>
-<select name="fetalMovement">
-  <option>Normal</option><option>Reduced</option><option>Absent</option>
-</select>
+</div>
 
-<label>Diet</label>
-<select name="diet"><option>Balanced</option><option>Needs Improvement</option></select>
-<label>Water Intake (glasses/day)</label><input type="number" name="waterIntake">
-<label>Exercise</label><select name="exercise"><option>Regular</option><option>Occasional</option><option>None</option></select>
-<label>Smoking/Alcohol/Drugs</label>
-<select name="smoking"><option>No</option><option>Yes</option></select>
-
-<label>Hemoglobin (g/dL)</label><input type="text" name="hemoglobin">
-<label>Blood Pressure (mmHg)</label><input type="text" name="bp">
-<label>Blood Sugar (mg/dL)</label><input type="text" name="sugar">
-<label>Urine Protein</label><select name="urine"><option>Negative</option><option>Positive</option></select>
-<label>Ultrasound Findings</label><input type="text" name="ultrasound">
-
-<label>Risk Level</label><select name="risk"><option>Low</option><option>Medium</option><option>High</option></select>
-<label>Suggestions / Precautions</label><input type="text" name="suggestions">
-<label>Next Appointment</label><input type="text" name="nextAppointment">
-
-<button type="submit">Submit</button>
 </form>
+</div>
+
+
+<script>
+let step = 0;
+const pages = document.querySelectorAll(".step-page");
+
+function showPage() {
+    pages.forEach((p, i) => p.classList.toggle("active", i === step));
+}
+
+function nextPage() {
+    if (step < pages.length - 1) step++;
+    showPage();
+}
+
+function prevPage() {
+    if (step > 0) step--;
+    showPage();
+}
+</script>
 
 </body>
 </html>

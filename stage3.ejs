@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stage 3 - Medical & Symptoms</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f4ff; display:flex; justify-content:center; padding:20px; }
+.container { width:500px; background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+label { font-weight:bold; margin-top:8px; display:block; }
+input, select { width:100%; padding:8px; margin:5px 0 15px; border:1px solid #bbb; border-radius:5px; }
+.btn { padding:10px 18px; border:none; border-radius:5px; background:#0066cc; color:#fff; cursor:pointer; margin-right:10px; }
+.btn:hover { background:#004c99; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Stage 3 - Medical & Symptoms</h2>
+<form action="/stage3" method="POST">
+
+<label>Chronic Conditions (Check all that apply):</label><br>
+<input type="checkbox" name="condition" value="Diabetes" <%= data.condition==='Diabetes'?'checked':'' %>> Diabetes<br>
+<input type="checkbox" name="condition" value="Hypertension" <%= data.condition==='Hypertension'?'checked':'' %>> Hypertension<br>
+<input type="checkbox" name="condition" value="Thyroid" <%= data.condition==='Thyroid'?'checked':'' %>> Thyroid<br>
+<input type="checkbox" name="condition" value="Heart Disease" <%= data.condition==='Heart Disease'?'checked':'' %>> Heart Disease<br>
+<input type="checkbox" name="condition" value="None" <%= data.condition==='None'?'checked':'' %>> None<br>
+
+<label>Current Medication:</label>
+<input type="text" name="medicine" value="<%= data.medicine || '' %>">
+
+<label>Nausea:</label>
+<select name="nausea">
+<option value="None" <%= data.nausea==='None'?'selected':'' %>>None</option>
+<option value="Mild" <%= data.nausea==='Mild'?'selected':'' %>>Mild</option>
+<option value="Severe" <%= data.nausea==='Severe'?'selected':'' %>>Severe</option>
+</select>
+
+<label>Swelling:</label>
+<select name="swelling">
+<option value="None" <%= data.swelling==='None'?'selected':'' %>>None</option>
+<option value="Mild" <%= data.swelling==='Mild'?'selected':'' %>>Mild</option>
+<option value="Severe" <%= data.swelling==='Severe'?'selected':'' %>>Severe</option>
+</select>
+
+<label>Abdominal Pain:</label>
+<select name="pain">
+<option value="None" <%= data.pain==='None'?'selected':'' %>>None</option>
+<option value="Mild" <%= data.pain==='Mild'?'selected':'' %>>Mild</option>
+<option value="Severe" <%= data.pain==='Severe'?'selected':'' %>>Severe</option>
+</select>
+
+<button type="button" class="btn" onclick="window.location='/stage2'">Back</button>
+<button type="submit" class="btn">Next</button>
+</form>
+</div>
+<script>
+(function(){
+  const form = document.querySelector('form');
+  const storageKey = 'multiStageData';
+  function collect(form){
+    const fd = new FormData(form);
+    const obj = {};
+    for(const [k,v] of fd.entries()){
+      if (obj[k] !== undefined) {
+        if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
+        obj[k].push(v);
+      } else obj[k] = v;
+    }
+    return obj;
+  }
+  function save(obj){
+    const prev = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    localStorage.setItem(storageKey, JSON.stringify(Object.assign({}, prev, obj)));
+  }
+  function prefill(){
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    if(!saved) return;
+    Object.keys(saved).forEach(k=>{
+      const els = form.querySelectorAll('[name="'+k+'"]');
+      if(!els.length) return;
+      els.forEach(el=>{
+        if(el.type === 'checkbox' || el.type === 'radio'){
+          if(Array.isArray(saved[k])) el.checked = saved[k].includes(el.value);
+          else el.checked = saved[k] === el.value;
+        } else el.value = saved[k];
+      });
+    });
+  }
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    save(collect(form));
+    window.location = '/stage4';
+  });
+  document.addEventListener('DOMContentLoaded', prefill);
+})();
+</script>
+</body>
+</html>
