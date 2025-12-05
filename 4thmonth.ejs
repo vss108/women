@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fourth Month - Pregnancy Care</title>
+  <style>
+    /* Reset & body */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; line-height:1.6; }
+
+    /* Header */
+    header{ 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding:15px 30px; 
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky; top:0; z-index: 100;
+    }
+    .logo{ font-size:22px; font-weight:bold; color:#333 }
+    .top-right a{ 
+      text-decoration:none; padding:8px 14px; 
+      background:#ff6666; color:#fff; border-radius:6px; font-weight:500;
+      transition:0.3s;
+    }
+    .top-right a:hover{ background:#e60000 }
+
+    /* Main container */
+    main{ max-width:1000px; margin:40px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    h1{ color:#cc0000; text-align:center; margin-bottom:10px; font-size:28px; }
+    p.subtitle{ color:#666; font-size:14px; margin-bottom:30px; font-style:italic; text-align:center }
+
+    /* Section cards */
+    .section, .emergency-box, .family-box, .tip-box { 
+      border-left-width:6px; border-left-style:solid; padding:20px 25px; margin:30px 0; border-radius:8px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover, .emergency-box:hover, .family-box:hover, .tip-box:hover{ transform: translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+
+    /* Section title */
+    h2.section-title{ font-size:20px; font-weight:bold; margin-bottom:15px; }
+    
+    /* Flex/grid for Do/Don't lists */
+    .flex-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+    @media(max-width:768px){ .flex-grid{ grid-template-columns: 1fr; } }
+
+    /* Lists */
+    ul{ list-style:none; padding-left:0; }
+    li{ padding:5px 0; font-size:15px; }
+    li:before{ content:"•"; color:#ff6666; display:inline-block; width:1em; margin-left:-1em; }
+
+    /* Do/Don't icons */
+    .do-item:before{ content:"✔ "; color:#28a745; font-weight:bold; margin-right:8px; }
+    .avoid-item:before{ content:"🚫 "; margin-right:8px; color:#f44336; font-weight:bold; }
+
+    /* Section colors */
+    .diet { border-left-color:#ff9800; background:#fff8e1; }
+    .activity { border-left-color:#2196f3; background:#e3f2fd; }
+    .lifestyle { border-left-color:#9c27b0; background:#f3e5f5; }
+    .mental { border-left-color:#e91e63; background:#fce4ec; }
+    .medical { border-left-color:#00bcd4; background:#e0f2f1; }
+    .symptoms { border-left-color:#8bc34a; background:#f1f8e9; }
+    .emergency-box { border-left-color:#d32f2f; background:#ffe6e6; }
+    .family-box { border-left-color:#1565c0; background:#e6f3ff; }
+    .tip-box { border-left-color:#ffc107; background:#fff3cd; font-weight:500; margin:15px 0; padding:12px; border-radius:6px; }
+
+    /* Headings inside grid */
+    .flex-grid h4{ margin-top:0; padding-bottom:6px; border-bottom:2px solid currentColor; }
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌷 Fourth Month of Pregnancy (Weeks 13–16)</h1>
+  <p class="subtitle"><strong>Welcome to the 2nd Trimester! Baby starts hearing sounds, facial features develop, and movement may begin soon. Mother's energy improves but care remains important.</strong></p>
+
+  <!-- Diet Precautions -->
+  <div class="section diet">
+    <h2 class="section-title">🥗 Diet Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <h4 style="color:#4caf50;">✔ Include</h4>
+        <ul>
+          <li class="do-item">Calcium foods: Milk, curd, ragi</li>
+          <li class="do-item">Iron rich: Spinach, beetroot, jaggery, dates</li>
+          <li class="do-item">Protein: Eggs, paneer, dal, chicken, fish (well cooked)</li>
+          <li class="do-item">Healthy fats: Nuts, ghee in small amount</li>
+          <li class="do-item">Fiber rich foods: Fruits, vegetables, oats</li>
+          <li class="do-item">Drink 3–3.5 liters water → prevents constipation</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:#f44336;">🚫 Avoid</h4>
+        <ul>
+          <li class="avoid-item">Too much sugar & fried foods</li>
+          <li class="avoid-item">Pickles and high salt foods (BP rise)</li>
+          <li class="avoid-item">Uncooked/packaged meats</li>
+          <li class="avoid-item">Soda & energy drinks</li>
+          <li class="avoid-item">Excess caffeine (>1 cup/day)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box">📌 Continue Calcium + Vitamin D + Folic Acid supplements</div>
+  </div>
+
+  <!-- Physical Activity -->
+  <div class="section activity">
+    <h2 class="section-title">🧍‍♀️ Physical Activity & Exercise Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <h4 style="color:#4caf50;">✔ Do</h4>
+        <ul>
+          <li class="do-item">Walk 30–45 mins daily</li>
+          <li class="do-item">Prenatal yoga and pelvic strengthening exercises</li>
+          <li class="do-item">Gentle stretching for back pain</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:#f44336;">🚫 Avoid</h4>
+        <ul>
+          <li class="avoid-item">Sleeping flat on the back for long time</li>
+          <li class="avoid-item">Heavy lifting</li>
+          <li class="avoid-item">High-impact exercises (running, jumping)</li>
+          <li class="avoid-item">Housework that puts strain (mopping, fast bending)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box">📌 Use pillow between legs while sleeping</div>
+  </div>
+
+  <!-- Mental Health -->
+  <div class="section mental">
+    <h2 class="section-title">🧠 Mental Health & Emotional Care</h2>
+    <div class="flex-grid">
+      <div>
+        <h4 style="color:#4caf50;">✔ Do</h4>
+        <ul>
+          <li class="do-item">Practice relaxation breathing</li>
+          <li class="do-item">Spend time with positive people</li>
+          <li class="do-item">Keep away from unnecessary stress</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:#f44336;">🚫 Avoid</h4>
+        <ul>
+          <li class="avoid-item">Negative thoughts or arguments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hygiene & Lifestyle -->
+  <div class="section lifestyle">
+    <h2 class="section-title">🛁 Hygiene & Lifestyle Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <h4 style="color:#4caf50;">✔ Do</h4>
+        <ul>
+          <li class="do-item">Maintain oral hygiene (dental check if required)</li>
+          <li class="do-item">Take a bath daily, keep private area clean</li>
+          <li class="do-item">Wear comfortable cotton innerwear</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:#f44336;">🚫 Avoid</h4>
+        <ul>
+          <li class="avoid-item">Exposure to chemical products, strong perfumes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical Checkups -->
+  <div class="section medical">
+    <h2 class="section-title">🩺 Medical Checkups in Month-4</h2>
+    <ul>
+      <li class="do-item">Second-trimester scan / early anomaly scan possible</li>
+      <li class="do-item">Weight & BP monitoring</li>
+      <li class="do-item">Urine test for infection</li>
+      <li class="do-item">Thyroid and hemoglobin check if needed</li>
+    </ul>
+    <div class="tip-box">📌 Fetal movement might start soon (as light flutters)</div>
+  </div>
+
+  <!-- Normal Body Changes -->
+  <div class="section symptoms">
+    <h2 class="section-title">🤰 Normal Body Changes this Month</h2>
+    <ul>
+      <li class="do-item">Increased appetite</li>
+      <li class="do-item">Reduced nausea</li>
+      <li class="do-item">Abdomen becomes slightly visible</li>
+      <li class="do-item">Back pain may start</li>
+      <li class="do-item">Leg cramps possible</li>
+      <li class="do-item">Skin changes (dark line on belly: linea nigra)</li>
+    </ul>
+    <p style="color:#558b2f;"><strong>➡ These are normal — not to worry</strong></p>
+  </div>
+
+  <!-- Warning Symptoms -->
+  <div class="emergency-box">
+    <h2 class="section-title">❌ Warning Symptoms — Immediate Doctor Visit</h2>
+    <ul>
+      <li class="avoid-item">Heavy bleeding</li>
+      <li class="avoid-item">Severe abdominal cramps</li>
+      <li class="avoid-item">Sudden swelling (face/hands)</li>
+      <li class="avoid-item">Severe headache or vision changes</li>
+      <li class="avoid-item">High fever</li>
+      <li class="avoid-item">Very bad smell discharge</li>
+      <li class="avoid-item">No improvement from vomiting</li>
+    </ul>
+  </div>
+
+  <!-- Family Support -->
+  <div class="family-box">
+    <h2 class="section-title">❤️ Family Support Tips</h2>
+    <ul>
+      <li class="do-item">Encourage healthy eating and walking</li>
+      <li class="do-item">Avoid giving emotional stress</li>
+      <li class="do-item">Help with household chores</li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

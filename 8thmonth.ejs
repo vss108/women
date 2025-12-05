@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eighth Month - Pregnancy Care</title>
+  <style>
+    /* Reset & Body */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; line-height:1.6; }
+
+    /* Header */
+    header{ 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding:15px 30px; 
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky; top:0; z-index: 100;
+    }
+    .logo{ font-size:22px; font-weight:bold; color:#333 }
+    .top-right a{ 
+      text-decoration:none; padding:8px 14px; 
+      background:#ff6666; color:#fff; border-radius:6px; font-weight:500;
+      transition:0.3s;
+    }
+    .top-right a:hover{ background:#e60000 }
+
+    /* Main Container */
+    main{ max-width:1000px; margin:40px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    h1{ color:#cc0000; text-align:center; margin-bottom:10px; font-size:28px; }
+    p.subtitle{ color:#666; font-size:14px; margin-bottom:30px; font-style:italic; text-align:center }
+
+    /* Section cards */
+    .section, .emergency-box, .tip-box { 
+      border-left-width:6px; border-left-style:solid; padding:20px 25px; margin:30px 0; border-radius:8px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover, .emergency-box:hover, .tip-box:hover{ transform: translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+
+    /* Section Title */
+    h2.section-title{ font-size:20px; font-weight:bold; margin-bottom:15px; }
+
+    /* Lists */
+    ul{ list-style:none; padding-left:0; }
+    li{ padding:5px 0; font-size:15px; }
+    li:before{ content:"•"; color:#ff6666; display:inline-block; width:1em; margin-left:-1em; }
+
+    /* Do/Don't icons */
+    .do-item:before{ content:"✔ "; color:#28a745; font-weight:bold; margin-right:8px; }
+    .avoid-item:before{ content:"🚫 "; margin-right:8px; color:#f44336; font-weight:bold; }
+
+    /* Section colors */
+    .baby-growth { border-left-color:#4caf50; background:#f1f8e9; }
+    .body-changes { border-left-color:#8bc34a; background:#f1f8e9; }
+    .diet { border-left-color:#ff9800; background:#fff8e1; }
+    .avoid-food { border-left-color:#f44336; background:#ffe6e6; }
+    .activity { border-left-color:#2196f3; background:#e3f2fd; }
+    .tests { border-left-color:#00bcd4; background:#e0f2f1; }
+    .mental { border-left-color:#e91e63; background:#fce4ec; }
+    .doctor-tips { border-left-color:#9c27b0; background:#f3e5f5; }
+    .emergency-box { border-left-color:#d32f2f; background:#ffe6e6; }
+    .tip-box { border-left-color:#ffc107; background:#fff3cd; font-weight:500; margin:15px 0; padding:12px; border-radius:6px; }
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌼 Eighth Month of Pregnancy (Week 29–32)</h1>
+  <p class="subtitle"><strong>This is the final trimester phase where the baby gains fat, brain develops rapidly, and the mother may experience increased discomfort.</strong></p>
+
+  <!-- Baby Growth -->
+  <div class="section baby-growth">
+    <h2 class="section-title">👶 Baby Growth</h2>
+    <ul>
+      <li>Baby size: ~ 40–45 cm, 1.8–2.3 kg</li>
+      <li>Brain development very fast — baby can hear, respond to light & sound</li>
+      <li>Lungs continue maturing (getting ready for breathing)</li>
+      <li>Baby starts moving to head-down position</li>
+      <li>Strong kicks — less space to move</li>
+    </ul>
+  </div>
+
+  <!-- Mother's Body Changes -->
+  <div class="section body-changes">
+    <h2 class="section-title">🤰 Mother's Body Changes</h2>
+    <ul>
+      <li>😮‍💨 Shortness of breath due to uterus pushing diaphragm</li>
+      <li>🚽 More frequent urination</li>
+      <li>🤕 Back pain & pelvic pressure</li>
+      <li>💧 Swelling in legs/feet (normal unless sudden)</li>
+      <li>🩸 White discharge increases (normal unless smelly/itchy)</li>
+      <li>😴 Difficulty sleeping</li>
+      <li>⚡ False contractions (Braxton Hicks)</li>
+    </ul>
+  </div>
+
+  <!-- Diet -->
+  <div class="section diet">
+    <h2 class="section-title">🍽️ Foods to Eat</h2>
+    <ul>
+      <li class="do-item">Iron-rich foods: Spinach, beetroot, broccoli, jaggery, dates</li>
+      <li class="do-item">Protein: Eggs, milk, curd, paneer, fish/chicken (well cooked), dal</li>
+      <li class="do-item">Calcium: Ragi, almonds, sesame seeds, milk products</li>
+      <li class="do-item">Hydration: 8–10 glasses of water</li>
+      <li class="do-item">Fiber: Whole grains, fruits, vegetables to prevent constipation</li>
+    </ul>
+  </div>
+
+  <!-- Foods to Avoid -->
+  <div class="section avoid-food">
+    <h2 class="section-title">🚫 Foods to Avoid</h2>
+    <ul>
+      <li class="avoid-item">Street food / unhygienic foods</li>
+      <li class="avoid-item">Too much salt → swelling ↑</li>
+      <li class="avoid-item">Papaya and pineapple (in large quantity)</li>
+      <li class="avoid-item">Excessive sugary foods</li>
+      <li class="avoid-item">Unpasteurized milk & cheese</li>
+      <li class="avoid-item">Undercooked meat/eggs</li>
+    </ul>
+  </div>
+
+  <!-- Exercises -->
+  <div class="section activity">
+    <h2 class="section-title">🧘‍♀️ Exercises & Activity</h2>
+    <ul>
+      <li class="do-item">Walking 30 mins/day</li>
+      <li class="do-item">Pelvic floor (Kegel) exercises for normal delivery prep</li>
+      <li class="do-item">Light prenatal yoga (doctor recommended)</li>
+      <li class="do-item">Sleep on left side — improves blood flow to baby</li>
+      <li class="avoid-item">Avoid heavy physical lifting or standing long hours</li>
+    </ul>
+  </div>
+
+  <!-- Required Tests -->
+  <div class="section tests">
+    <h2 class="section-title">🧪 Required Tests & Check-ups</h2>
+    <ul>
+      <li class="do-item">Routine ANC Check-up (Every 2 Weeks)</li>
+      <li class="do-item">Blood Pressure, Weight, Baby Heartbeat Monitoring</li>
+      <li class="do-item">Ultrasound – Growth Scan</li>
+      <li class="do-item">Hemoglobin, Blood Sugar, Urine Test</li>
+      <li class="do-item">Check for Anemia, Gestational Diabetes, Infections</li>
+      <li class="do-item">Doctor checks baby's position in uterus</li>
+      <li class="do-item">If Rh negative – possible Anti-D injection</li>
+    </ul>
+  </div>
+
+  <!-- Warning Symptoms -->
+  <div class="emergency-box">
+    <h2 class="section-title">⚠️ Warning Symptoms</h2>
+    <ul>
+      <li class="avoid-item">Severe abdominal pain or regular contractions</li>
+      <li class="avoid-item">Reduced baby movements</li>
+      <li class="avoid-item">Heavy bleeding or watery discharge (water break)</li>
+      <li class="avoid-item">Severe headache, sudden swelling → Pre-eclampsia</li>
+      <li class="avoid-item">High fever</li>
+      <li class="avoid-item">Vision blurring, dizziness</li>
+    </ul>
+  </div>
+
+  <!-- Doctor's Tips -->
+  <div class="section doctor-tips">
+    <h2 class="section-title">👩‍⚕️ Doctor's Tips for Normal Delivery</h2>
+    <ul>
+      <li class="do-item">Drink enough water & stay active daily</li>
+      <li class="do-item">Control weight gain (as per doctor guidance)</li>
+      <li class="do-item">Regular pelvic floor exercises</li>
+      <li class="do-item">Maintain calm — avoid stress & anxiety</li>
+      <li class="do-item">Attend prenatal classes if possible</li>
+    </ul>
+  </div>
+
+  <!-- Mental Health -->
+  <div class="section mental">
+    <h2 class="section-title">❤️ Emotional & Mental Health Care</h2>
+    <ul>
+      <li class="do-item">Practice deep breathing & meditation</li>
+      <li class="do-item">Family support is very important</li>
+      <li class="do-item">Avoid negative thoughts — be happy & relaxed 😊</li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

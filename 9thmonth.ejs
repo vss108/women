@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ninth Month - Pregnancy Care</title>
+  <style>
+    /* Reset & body */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; line-height:1.6; }
+
+    /* Header */
+    header{ 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding:15px 30px; 
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky; top:0; z-index: 100;
+    }
+    .logo{ font-size:22px; font-weight:bold; color:#333 }
+    .top-right a{ 
+      text-decoration:none; padding:8px 14px; 
+      background:#ff6666; color:#fff; border-radius:6px; font-weight:500;
+      transition:0.3s;
+    }
+    .top-right a:hover{ background:#e60000 }
+
+    /* Main container */
+    main{ max-width:900px; margin:40px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    h1{ color:#cc0000; text-align:center; margin-bottom:30px; font-size:28px; }
+
+    /* Section cards */
+    .section{ 
+      border-left-width:6px; border-left-style:solid; padding:20px 25px; margin:30px 0; border-radius:8px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover{ transform: translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+
+    h2{ margin-top:0; font-size:22px; }
+    h4{ margin-bottom:10px; font-size:18px; }
+
+    ul{ list-style:none; padding-left:0; }
+    li{ padding:5px 0; font-size:15px; }
+    li::before{ content:"•"; color:#ff6666; display:inline-block; width:1em; margin-left:-1em; }
+
+    /* Section colors */
+    .baby-growth{ border-left-color:#4caf50; background:#f1f8e9 }
+    .mother-body{ border-left-color:#8bc34a; background:#f1f8e9 }
+    .foods-eat{ border-left-color:#ff9800; background:#fff8e1 }
+    .foods-avoid{ border-left-color:#f44336; background:#ffe6e6 }
+    .exercise{ border-left-color:#2196f3; background:#e3f2fd }
+    .tests{ border-left-color:#00bcd4; background:#e0f2f1 }
+    .warning{ border-left-color:#d32f2f; background:#ffe6e6 }
+    .hospital-bag{ border-left-color:#9c27b0; background:#f3e5f5 }
+    .doctor-tips{ border-left-color:#ff6b6b; background:#ffe6e6 }
+    .final-goal{ border-left-color:#1565c0; background:#e6f3ff }
+
+    /* Responsive grid */
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:700px){ .grid-2{ display:block } }
+
+    /* Emoji spacing */
+    h2::before, h1::before{ margin-right:6px }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌟 Ninth Month of Pregnancy — FINAL MONTH!</h1>
+  <p><strong>Your body is preparing for labor and delivery. Stay calm, be prepared, and keep track of baby's movements.</strong></p>
+
+  <!-- Baby Growth -->
+  <div class="section baby-growth">
+    <h2>👶 Baby Growth</h2>
+    <ul>
+      <li>Baby weight: ~2.7 to 3.5 kg</li>
+      <li>Baby length: 45–50 cm</li>
+      <li>Lungs fully developed → ready to breathe outside</li>
+      <li>Baby gains fat for warmth</li>
+      <li>Baby settles head-down (cephalic) position</li>
+      <li>Strong movements: Rolling + stretching</li>
+      <li>Brain development continues rapidly</li>
+    </ul>
+  </div>
+
+  <!-- Mother's Body Changes -->
+  <div class="section mother-body">
+    <h2>🤰 Mother's Body Changes</h2>
+    <ul>
+      <li>More pelvic pressure & frequent urination</li>
+      <li>Backache, leg cramps, difficulty sleeping</li>
+      <li>Cervix softens & dilates</li>
+      <li>False labor pains (Braxton Hicks)</li>
+      <li>Pinkish mucus discharge — "mucus plug"</li>
+      <li>Breathing easier if baby drops down</li>
+    </ul>
+  </div>
+
+  <!-- Foods to Eat -->
+  <div class="section foods-eat">
+    <h2>🍽️ Foods to Eat</h2>
+    <ul>
+      <li>Protein-rich: Egg, milk, curd, chicken/fish, pulses</li>
+      <li>Iron & calcium: Spinach, ragi, dates, beetroot, almonds</li>
+      <li>Hydration: 8–10 glasses water/day</li>
+      <li>Small frequent meals to avoid acidity</li>
+      <li>Fiber-rich foods → avoid constipation during delivery</li>
+    </ul>
+  </div>
+
+  <!-- Foods to Avoid -->
+  <div class="section foods-avoid">
+    <h2>🚫 Foods to Avoid</h2>
+    <ul>
+      <li>Oily, spicy food — triggers acidity & discomfort</li>
+      <li>Too much salt — swelling ↑</li>
+      <li>Junk/outside food — risk of infection</li>
+      <li>Limit sweets → maintain baby weight</li>
+    </ul>
+  </div>
+
+  <!-- Exercises -->
+  <div class="section exercise">
+    <h2>🧘‍♀️ Exercises & Activity</h2>
+    <ul>
+      <li>30 minutes walking daily</li>
+      <li>Pelvic floor exercises (Kegel)</li>
+      <li>Squats & prenatal yoga if approved</li>
+      <li>Practice breathing exercises</li>
+      <li>⛔ Avoid: Long travel, Heavy work, Sleeping on back</li>
+      <li>📌 Sleep on left side to improve baby's oxygen supply</li>
+    </ul>
+  </div>
+
+  <!-- Required Tests -->
+  <div class="section tests">
+    <h2>🧪 Required Tests & Check-ups</h2>
+    <ul>
+      <li>Weekly ANC Check-up</li>
+      <li>Fetal Heart Rate Monitoring</li>
+      <li>Blood Pressure & Weight check</li>
+      <li>Growth Scan if needed</li>
+      <li>Baby Position Check</li>
+      <li>Urine Test (infection/protein)</li>
+      <li>Non-Stress Test if reduced movements</li>
+      <li>GBS test depends on hospital</li>
+    </ul>
+  </div>
+
+  <!-- Warning Symptoms -->
+  <div class="section warning">
+    <h2>⚠️ Warning Symptoms</h2>
+    <ul style="color:#c62828">
+      <li>Severe abdominal pain / contractions every 5–10 mins</li>
+      <li>Water breaking</li>
+      <li>Bleeding</li>
+      <li>Very less/no baby movements</li>
+      <li>High fever, severe headache, swelling — pre-eclampsia</li>
+      <li>Convulsions, dizziness, blurred vision</li>
+    </ul>
+  </div>
+
+  <!-- Hospital Bag -->
+  <div class="section hospital-bag grid-2">
+    <div>
+      <h4 style="color:#4caf50; border-bottom:2px solid #4caf50; padding-bottom:6px;">For Mother</h4>
+      <ul>
+        <li>Hospital records & ID</li>
+        <li>Maternity gown & shawl</li>
+        <li>Sanitary pads</li>
+        <li>Comfortable clothes, slippers</li>
+        <li>Toiletries</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#4caf50; border-bottom:2px solid #4caf50; padding-bottom:6px;">For Baby</h4>
+      <ul>
+        <li>Diapers, baby clothes, blanket, cap, socks</li>
+        <li>Baby wipes, feeding essentials</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Doctor's Tips -->
+  <div class="section doctor-tips">
+    <h2>🧑‍⚕️ Tips from Doctors — Normal Delivery</h2>
+    <ul>
+      <li>Stay active till labor — daily walk</li>
+      <li>Avoid fear & stress</li>
+      <li>Follow breathing & relaxation techniques</li>
+      <li>Healthy diet → avoid excessive baby weight</li>
+      <li>Trust your body — women are built for this ❤️</li>
+    </ul>
+  </div>
+
+  <!-- Final Goals -->
+  <div class="section final-goal">
+    <h2>🎯 Final Month Goals</h2>
+    <ul>
+      <li>Track baby movements daily</li>
+      <li>Attend doctor's visits weekly</li>
+      <li>Stay calm and mentally prepared</li>
+      <li>Know hospital route and emergency number</li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

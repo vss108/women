@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Second Month - Pregnancy Care</title>
+  <style>
+    /* Reset & body */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; line-height:1.6; }
+
+    /* Header */
+    header{ 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding:15px 30px; 
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky; top:0; z-index: 100;
+    }
+    .logo{ font-size:22px; font-weight:bold; color:#333 }
+    .top-right a{ 
+      text-decoration:none; padding:8px 14px; 
+      background:#ff6666; color:#fff; border-radius:6px; font-weight:500;
+      transition:0.3s;
+    }
+    .top-right a:hover{ background:#e60000 }
+
+    /* Main container */
+    main{ max-width:1000px; margin:40px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    h1{ color:#cc0000; text-align:center; margin-bottom:10px; font-size:28px; }
+    .subtitle{ color:#666; font-size:14px; margin-bottom:30px; font-style:italic; text-align:center }
+
+    /* Section cards */
+    .section, .emergency-box, .family-box, .tip-box { 
+      border-left-width:6px; border-left-style:solid; padding:20px 25px; margin:30px 0; border-radius:8px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover, .emergency-box:hover, .family-box:hover, .tip-box:hover{ transform: translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+
+    /* Section title */
+    h2.section-title{ font-size:20px; font-weight:bold; margin-bottom:15px; color:#cc0000; }
+    h2.section-title::before{ margin-right:6px; }
+
+    /* Flex grid for Do/Don't lists */
+    .flex-grid{ display:flex; gap:40px; }
+    .flex-grid > div{ flex:1; }
+    @media(max-width:768px){ .flex-grid{ display:block; } }
+
+    /* Lists */
+    ul{ list-style:none; padding-left:0; }
+    li{ padding:5px 0; font-size:15px; }
+    li:before{ content:"•"; color:#ff6666; display:inline-block; width:1em; margin-left:-1em; }
+
+    /* Do/Don't icons */
+    strong:before { margin-right:4px; }
+    .do-item:before{ content:"✔ "; color:#28a745; font-weight:bold; margin-right:8px; }
+    .avoid-item:before{ content:"🚫 "; margin-right:8px; }
+
+    /* Section colors */
+    .section { border-left-color:#ff6666; background:#fff5f5; }
+    .tip-box{ border-left-color:#ffc107; background:#fff3cd; font-weight:500; margin:15px 0; }
+    .emergency-box{ border-left-color:#cc0000; background:#ffe6e6; }
+    .family-box{ border-left-color:#0066cc; background:#e6f3ff; }
+
+    /* Sub-lists inside flex */
+    .flex-grid ul{ padding-left:15px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌷 Precautions in 2nd Month of Pregnancy (Weeks 5–8)</h1>
+  <p class="subtitle">Baby's heart beats strongly, hands, legs, and major organs start forming. Risk of miscarriage is still high → extra care needed.</p>
+
+  <!-- Diet Precautions -->
+  <div class="section">
+    <h2 class="section-title">🥗 Diet Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Eat</strong>
+        <ul>
+          <li>Continue Folic Acid daily</li>
+          <li>Protein foods: milk, curd, chicken, eggs, pulses</li>
+          <li>Calcium foods: ragi, milk, almonds, sesame seeds</li>
+          <li>Iron foods: leafy vegetables, beetroot, dates</li>
+          <li>Healthy snacks: fruits, nuts</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Raw papaya, pineapple</li>
+          <li>Processed and packaged foods</li>
+          <li>Excess sweets & salty snacks</li>
+          <li>High caffeine (limit 1 cup/day)</li>
+          <li>Unpasteurized dairy products</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box">📌 Tip: Eat 4–5 small meals instead of 3 big meals</div>
+  </div>
+
+  <!-- Nausea & Vomiting Precautions -->
+  <div class="section">
+    <h2 class="section-title">🤢 Nausea & Vomiting Precautions (Very Common Now)</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Ginger tea in small amounts</li>
+          <li>Eat dry snacks (biscuits) before getting up from bed</li>
+          <li>Avoid strong-smelling foods</li>
+          <li>Drink ORS, lemon water if vomiting is more</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Do not skip meals even if you feel uneasy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical & Check-up Precautions -->
+  <div class="section">
+    <h2 class="section-title">🩺 Medical & Check-up Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>First ultrasound may be done (to check heartbeat)</li>
+          <li>Blood tests for:
+            <ul>
+              <li>Hemoglobin</li>
+              <li>Blood group</li>
+              <li>Thyroid</li>
+              <li>Sugar</li>
+            </ul>
+          </li>
+          <li>Continue only doctor-prescribed medicines</li>
+          <li>Get vaccines as advised (e.g., Flu if needed)</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Self-medication of nausea tablets without doctor's advice</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity & Lifestyle Precautions -->
+  <div class="section">
+    <h2 class="section-title">🏃‍♀️ Activity & Lifestyle Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Light walking 20–30 minutes/day</li>
+          <li>Gentle stretching</li>
+          <li>Proper rest & afternoon nap if tired</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Long-distance road travel</li>
+          <li>Heavy lifting or fast movements</li>
+          <li>Sitting/standing for too long</li>
+          <li>Sleeping flat on back for long time</li>
+          <li>Gym workouts without guidance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mental Health Precautions -->
+  <div class="section">
+    <h2 class="section-title">😌 Mental Health Precautions</h2>
+    <ul>
+      <li>Stay positive, spend time with loved ones</li>
+      <li>Avoid stress & negative news</li>
+      <li>Practice deep breathing exercises</li>
+    </ul>
+  </div>
+
+  <!-- Hygiene Precautions -->
+  <div class="section">
+    <h2 class="section-title">🛁 Hygiene Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Maintain good hygiene</li>
+          <li>Avoid using harsh chemicals or mosquito repellant coils</li>
+          <li>Keep surroundings clean</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Cleaning pet waste (toxoplasmosis risk)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning Symptoms -->
+  <div class="emergency-box">
+    <h2 class="section-title">🔍 Warning Symptoms — Go to Doctor Immediately</h2>
+    <ul>
+      <li>Bleeding or spotting</li>
+      <li>Severe stomach pain</li>
+      <li>Unable to eat/drink due to vomiting</li>
+      <li>Foul-smelling discharge</li>
+      <li>High fever</li>
+      <li>Sudden weakness or fainting</li>
+    </ul>
+  </div>
+
+  <!-- Partner & Family Support -->
+  <div class="family-box">
+    <h2 class="section-title">❤️ Partner & Family Support</h2>
+    <ul>
+      <li>Help in kitchen and heavy household chores</li>
+      <li>Emotional support is very important</li>
+      <li>Make sure mother never skips meals</li>
+    </ul>
+  </div>
+
+</main>
+
+</body>
+</html>

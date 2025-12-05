@@ -10,6 +10,8 @@ const { body, validationResult } = require('express-validator');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
+// Parse JSON bodies for API endpoints
+app.use(express.json());
 // Session middleware (simple in-memory store)
 // Use Mongo-backed session store
 app.use(session({
@@ -84,6 +86,40 @@ const bookingSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 const Booking = mongoose.model('Booking', bookingSchema);
+
+// Cart schema - persisted per-session and optionally tied to a user
+const cartItemSchema = new mongoose.Schema({
+  itemId: String,
+  product: String,
+  price: Number,
+  qty: { type: Number, default: 1 },
+  metadata: Object
+}, { _id: false });
+
+const cartSchema = new mongoose.Schema({
+  sessionId: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  items: [cartItemSchema],
+  updatedAt: { type: Date, default: Date.now }
+});
+const Cart = mongoose.model('Cart', cartSchema);
+
+// Order schema - created when user checks out
+const orderItemSchema = new mongoose.Schema({
+  product: String,
+  price: Number,
+  qty: { type: Number, default: 1 },
+  metadata: Object
+}, { _id: false });
+
+const orderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  sessionId: String,
+  items: [orderItemSchema],
+  total: Number,
+  createdAt: { type: Date, default: Date.now }
+});
+const Order = mongoose.model('Order', orderSchema);
 
 // Simple nodemailer transporter scaffold (uses env vars)
 const mailerTransport = (() => {
@@ -191,8 +227,148 @@ app.get('/precautions', async (req,res) => {
   }
 });
 
+// 1st Month details page
+app.get('/1stmonth', (req, res) => {
+  res.render('1stmonth', { name: req.session.userName || null });
+});
+
+// Month 2–9 detail pages
+app.get('/2ndmonth', (req, res) => {
+  res.render('2ndmonth', { name: req.session.userName || null });
+});
+app.get('/3rdmonth', (req, res) => {
+  res.render('3rdmonth', { name: req.session.userName || null });
+});
+app.get('/4thmonth', (req, res) => {
+  res.render('4thmonth', { name: req.session.userName || null });
+});
+app.get('/5thmonth', (req, res) => {
+  res.render('5thmonth', { name: req.session.userName || null });
+});
+app.get('/6thmonth', (req, res) => {
+  res.render('6thmonth', { name: req.session.userName || null });
+});
+app.get('/7thmonth', (req, res) => {
+  res.render('7thmonth', { name: req.session.userName || null });
+});
+app.get('/8thmonth', (req, res) => {
+  res.render('8thmonth', { name: req.session.userName || null });
+});
+app.get('/9thmonth', (req, res) => {
+  res.render('9thmonth', { name: req.session.userName || null });
+});
+
 // Shopping Page
 app.get('/shopping', (req,res) => res.render('shopping', { name: req.session.userName || null }));
+
+// ------------------ Cart API ------------------
+// Helper: get or create cart for this session (or user)
+async function getOrCreateCart(req) {
+  const sessionId = req.sessionID;
+  const userId = req.session && req.session.userId ? req.session.userId : null;
+  let cart = await Cart.findOne({ sessionId });
+  if (!cart && userId) {
+    // try by userId
+    cart = await Cart.findOne({ userId });
+  }
+  if (!cart) {
+    cart = new Cart({ sessionId, userId, items: [] });
+    await cart.save();
+  } else {
+    // ensure userId set when logged in
+    if (userId && !cart.userId) { cart.userId = userId; await cart.save(); }
+  }
+  return cart;
+}
+
+// Get cart
+app.get('/api/cart', async (req, res) => {
+  try {
+    const cart = await getOrCreateCart(req);
+    return res.json({ items: cart.items || [] });
+  } catch (e) {
+    console.error('Cart get error:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Add item to cart
+app.post('/api/cart/add', async (req, res) => {
+  try {
+    const { itemId, product, price, qty = 1, metadata } = req.body;
+    if (!product || typeof price === 'undefined') return res.status(400).json({ error: 'product and price required' });
+    const cart = await getOrCreateCart(req);
+    const id = itemId || (Date.now().toString() + Math.random().toString(36).slice(2,8));
+    cart.items.push({ itemId: id, product, price: Number(price), qty: Number(qty), metadata: metadata || {} });
+    cart.updatedAt = new Date();
+    await cart.save();
+    return res.json({ items: cart.items });
+  } catch (e) {
+    console.error('Cart add error:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Remove item from cart by itemId
+app.post('/api/cart/remove', async (req, res) => {
+  try {
+    const { itemId } = req.body;
+    if (!itemId) return res.status(400).json({ error: 'itemId required' });
+    const cart = await getOrCreateCart(req);
+    cart.items = (cart.items || []).filter(i => i.itemId !== itemId);
+    cart.updatedAt = new Date();
+    await cart.save();
+    return res.json({ items: cart.items });
+  } catch (e) {
+    console.error('Cart remove error:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Clear cart
+app.post('/api/cart/clear', async (req, res) => {
+  try {
+    const cart = await getOrCreateCart(req);
+    cart.items = [];
+    cart.updatedAt = new Date();
+    await cart.save();
+    return res.json({ items: cart.items });
+  } catch (e) {
+    console.error('Cart clear error:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Checkout: create an order from cart and clear cart
+app.post('/api/checkout', async (req, res) => {
+  try {
+    const cart = await getOrCreateCart(req);
+    if (!cart || !cart.items || cart.items.length === 0) return res.status(400).json({ error: 'Cart is empty' });
+    const total = (cart.items || []).reduce((s,i) => s + (Number(i.price||0) * (i.qty || 1)), 0);
+    const order = new Order({ userId: cart.userId || null, sessionId: cart.sessionId, items: cart.items.map(i => ({ product: i.product, price: i.price, qty: i.qty || 1, metadata: i.metadata || {} })), total });
+    await order.save();
+
+    // Try sending a confirmation email if user/email available
+    if (cart.userId) {
+      try {
+        const user = await User.findById(cart.userId).lean();
+        if (user && user.email && mailerTransport) {
+          await mailerTransport.sendMail({ from: process.env.SMTP_FROM || 'noreply@example.com', to: user.email, subject: 'Order confirmation', text: `Order ${order._id} confirmed. Total: ₹${total}` });
+        }
+      } catch (e) { console.error('Order email error:', e); }
+    }
+
+    // Clear cart after successful order
+    cart.items = [];
+    cart.updatedAt = new Date();
+    await cart.save();
+
+    return res.json({ orderId: order._id, total });
+  } catch (e) {
+    console.error('Checkout error:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
 
 // Personal Precautions Form Page
 app.get('/personalPrecautions', (req,res) => res.render('personalPrecautions'));

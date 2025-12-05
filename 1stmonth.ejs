@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Month - Pregnancy Care</title>
+  <style>
+    /* Reset & body */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; line-height:1.6; }
+
+    /* Header */
+    header{ 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding:15px 30px; 
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky; top:0; z-index: 100;
+    }
+    .logo{ font-size:22px; font-weight:bold; color:#333 }
+    .top-right a{ 
+      text-decoration:none; padding:8px 14px; 
+      background:#ff6666; color:#fff; border-radius:6px; font-weight:500;
+      transition:0.3s;
+    }
+    .top-right a:hover{ background:#e60000 }
+
+    /* Main container */
+    main{ max-width:1000px; margin:40px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    h1{ color:#cc0000; text-align:center; margin-bottom:10px; font-size:28px; }
+    .subtitle{ color:#666; font-size:14px; margin-bottom:30px; font-style:italic; text-align:center }
+
+    /* Section cards */
+    .section, .emergency-box, .family-box { 
+      border-left-width:6px; border-left-style:solid; padding:20px 25px; margin:30px 0; border-radius:8px; background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover, .emergency-box:hover, .family-box:hover{ transform: translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+
+    h2.section-title{ font-size:20px; font-weight:bold; margin-bottom:15px; }
+    ul{ list-style:none; padding-left:0; }
+    li{ padding:5px 0; font-size:15px; }
+    li:before{ content:"•"; color:#ff6666; display:inline-block; width:1em; margin-left:-1em; }
+
+    /* Section colors */
+    .section { border-left-color:#ff6666; background:#fff5f5; }
+    .emergency-box{ border-left-color:#cc0000; background:#ffe6e6; }
+    .family-box{ border-left-color:#0066cc; background:#e6f3ff; }
+
+    /* Lists with check & cross icons */
+    .do-item:before{ content:"✔ "; color:#28a745; font-weight:bold; margin-right:8px; }
+    .avoid-item:before{ content:"🚫 "; margin-right:8px; }
+
+    /* Flex grid for Do/Don't lists */
+    .flex-grid{ display:flex; gap:40px; }
+    .flex-grid > div{ flex:1; }
+    @media(max-width:768px){ .flex-grid{ display:block; } }
+
+    /* Section title emoji */
+    h2.section-title::before, h1::before{ margin-right:6px; }
+
+    /* Sub-list inside flex */
+    .flex-grid ul{ padding-left:15px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌼 Precautions in 1st Month of Pregnancy (Weeks 1–4)</h1>
+  <p class="subtitle">This is the most sensitive period because baby's brain, spine, and heart start forming.</p>
+
+  <!-- Diet Precautions -->
+  <div class="section">
+    <h2 class="section-title">🥗 Diet Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Eat</strong>
+        <ul>
+          <li>Folic Acid foods: Spinach, broccoli, beans, eggs, banana</li>
+          <li>Iron foods: Dates, jaggery, green leafy vegetables</li>
+          <li>Proteins: Milk, dal, paneer, chicken (well cooked)</li>
+          <li>Drink 2–3 liters of water daily</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Raw papaya, pineapple (may cause uterine contractions)</li>
+          <li>Alcohol, smoking, drugs</li>
+          <li>Too much caffeine (max 1 cup tea/coffee per day)</li>
+          <li>Junk, oily and fast foods</li>
+          <li>Fish with high mercury (Shark, Swordfish)</li>
+          <li>Half-boiled eggs / undercooked meat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical Precautions -->
+  <div class="section">
+    <h2 class="section-title">🩺 Medical Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Take / Do</strong>
+        <ul>
+          <li>Folic Acid Tablet from day 1</li>
+          <li>Visit doctor for confirmation & health check-up</li>
+          <li>If taking any medicine — confirm with doctor first</li>
+          <li>Maintain healthy weight</li>
+          <li>Keep diabetes & thyroid under control (if already a patient)</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Do Not Take</strong>
+        <ul>
+          <li>Painkillers like Ibuprofen, Diclofenac without prescription</li>
+          <li>X-rays or Radiology exposure (only in emergency)</li>
+          <li>Self-medication</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity & Lifestyle Precautions -->
+  <div class="section">
+    <h2 class="section-title">🏃‍♀️ Activity & Lifestyle Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Light walking daily 20–30 mins</li>
+          <li>Take proper sleep (7–9 hrs)</li>
+          <li>Maintain stress-free environment</li>
+          <li>Avoid travel in bumpy/uncomfortable roads</li>
+          <li>Move slowly while getting up, avoid sudden jerks</li>
+          <li>Wear comfortable non-slip footwear</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Heavy lifting / household hard work</li>
+          <li>Running, jumping, heavy exercise</li>
+          <li>Bending too much</li>
+          <li>Long bike rides</li>
+          <li>Exposure to chemicals, smoke, pesticides</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mental Health Precautions -->
+  <div class="section">
+    <h2 class="section-title">🧘‍♀️ Mental Health Precautions</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Stay calm & relaxed</li>
+          <li>Practice deep breathing</li>
+          <li>Talk with family, avoid negative emotions</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Stress, anxiety</li>
+          <li>Overthinking about miscarriage possibilities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hygiene & Infection Prevention -->
+  <div class="section">
+    <h2 class="section-title">🛁 Hygiene & Infection Prevention</h2>
+    <div class="flex-grid">
+      <div>
+        <strong>✔ Do</strong>
+        <ul>
+          <li>Maintain personal hygiene</li>
+          <li>Wear clean cotton innerwear</li>
+          <li>Cook food properly</li>
+          <li>Safe drinking water</li>
+          <li>Avoid close contact with infections</li>
+        </ul>
+      </div>
+      <div>
+        <strong>🚫 Avoid</strong>
+        <ul>
+          <li>Cleaning cat litter (toxoplasmosis risk)</li>
+          <li>Eating from unhygienic street stalls</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Precautions -->
+  <div class="emergency-box">
+    <h2 class="section-title">🩸 Emergency Precautions</h2>
+    <p><strong>Immediately contact doctor if:</strong></p>
+    <ul>
+      <li>Strong abdominal cramps</li>
+      <li>Heavy bleeding</li>
+      <li>Excessive vomiting & dehydration</li>
+      <li>High fever</li>
+      <li>Foul-smelling discharge</li>
+      <li>Fainting or severe dizziness</li>
+    </ul>
+  </div>
+
+  <!-- Family & Partner Support -->
+  <div class="family-box">
+    <h2 class="section-title">❤️ Family & Partner Support</h2>
+    <ul>
+      <li>Provide emotional care to mother</li>
+      <li>Assist in daily activities, reduce workload</li>
+      <li>Keep peaceful environment at home</li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

@@ -73,6 +73,25 @@
         .cart-summary h2 { color: #cc0000; }
 
         @media (max-width:700px){ .products-grid { grid-template-columns: 1fr; } }
+        /* Floating top-right cart summary */
+        .floating-cart-summary {
+          position: fixed;
+          top: 90px;
+          right: 20px;
+          width: 320px;
+          background: #ffffff;
+          border: 1px solid #eee;
+          border-radius: 8px;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+          z-index: 1200;
+          overflow: hidden;
+          font-size: 14px;
+        }
+        .floating-cart-summary .item-line { padding: 8px 10px; border-bottom: 1px solid #f1f1f1; display:flex; justify-content:space-between; align-items:center; }
+        .floating-cart-summary .item-line .name { color:#333; }
+        .floating-cart-summary .item-line .price { color:#28a745; font-weight:700; }
+        .floating-cart-summary .empty { padding: 12px; color:#888; text-align:center; }
+        .bill-btn { background:#ff8c66; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; margin-right:8px; }
     </style>
 </head>
 <body>
@@ -89,6 +108,7 @@
         <% } else { %>
             <a href="/login">Login</a>
         <% } %>
+      <button id="billBtn" class="bill-btn">Bill</button>
         <div class="cart-icon-container">
             <div class="cart-icon" id="cartIconBtn">
                 🛒
@@ -105,94 +125,864 @@
     </div>
 </header>
 
+<!-- Floating top-right cart summary -->
+<div id="cartSummaryTopRight" class="floating-cart-summary" style="display:none;">
+    <div style="padding:10px; font-weight:bold; color:#cc0000;">Cart Summary</div>
+  <div id="cartSummaryList" style="max-height:260px; overflow:auto;"></div>
+  <div style="padding:10px; border-top:1px solid #eee; text-align:right;">
+    <div id="cartSummaryTotal" style="font-weight:bold; margin-bottom:8px;">Total: ₹0</div>
+    <button id="proceedCheckoutBtn" class="add-btn" style="background:#0066cc; display:none;">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- Bill Modal/Display -->
+<div id="billModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; overflow-y:auto;">
+  <div style="background:white; width:90%; max-width:700px; margin:30px auto; padding:20px; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #cc0000; padding-bottom:10px;">
+      <h2 style="color:#cc0000; margin:0;">📋 BILL</h2>
+      <button onclick="closeBillModal()" style="background:#cc0000; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-size:14px;">Close</button>
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <table style="width:100%; border-collapse:collapse; margin-bottom:15px;">
+        <thead>
+          <tr style="background-color:#ffcccc; border-bottom:2px solid #cc0000;">
+            <th style="padding:10px; text-align:left; font-weight:bold; color:#333;">Item Name</th>
+            <th style="padding:10px; text-align:center; font-weight:bold; color:#333;">Quantity</th>
+            <th style="padding:10px; text-align:center; font-weight:bold; color:#333;">Price</th>
+            <th style="padding:10px; text-align:right; font-weight:bold; color:#333;">Total</th>
+          </tr>
+        </thead>
+        <tbody id="billItems">
+          <tr><td colspan="4" style="padding:10px; text-align:center; color:#999;">No items in cart</td></tr>
+        </tbody>
+      </table>
+      
+      <div style="text-align:right; padding:15px; background:#fff0f0; border-radius:5px; border:2px solid #ffcccc;">
+        <div style="font-size:18px; font-weight:bold; color:#cc0000;">
+          Grand Total: <span id="billGrandTotal">₹0</span>
+        </div>
+      </div>
+    </div>
+    
+    <div style="text-align:center; margin-top:20px; padding-top:15px; border-top:1px solid #ddd;">
+      <button onclick="printBill()" style="background:#28a745; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; margin-right:10px; font-size:14px;">🖨️ Print Bill</button>
+      <button onclick="closeBillModal()" style="background:#0066cc; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:14px;">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
 <main>
     <a href="/precautions" class="back-btn">← Back</a>
     
     <h1>Pregnancy Care Products</h1>
 
-    <div class="products-grid">
-        <div class="product-card">
-            <h3>Prenatal Vitamins</h3>
-            <p>Essential vitamins and minerals for healthy pregnancy</p>
-            <div class="price">₹599</div>
-            <button class="add-btn" onclick="addToCart('Prenatal Vitamins', 599)">Add to Cart</button>
-        </div>
+    <div class="products-grid" id="productsGrid">
 
-        <div class="product-card">
-            <h3>Maternity Pillow</h3>
-            <p>Comfortable support pillow for better sleep</p>
-            <div class="price">₹1,299</div>
-            <button class="add-btn" onclick="addToCart('Maternity Pillow', 1299)">Add to Cart</button>
-        </div>
+<!-- 1 -->
+<div class="product-card">
+  <h3>Prenatal Multivitamin Capsules</h3>
+  <p>All-in-one prenatal vitamin with folic acid, iron, B12 and DHA for early fetal development.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Prenatal Multivitamin Capsules" data-price="699">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Pregnancy Test Kit</h3>
-            <p>Accurate home pregnancy test kit (Pack of 2)</p>
-            <div class="price">₹199</div>
-            <button class="add-btn" onclick="addToCart('Pregnancy Test Kit', 199)">Add to Cart</button>
-        </div>
+<!-- 2 -->
+<div class="product-card">
+  <h3>Folic Acid 5mg Tablets</h3>
+  <p>High-strength folic acid to reduce neural tube defect risk in early pregnancy.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Folic Acid 5mg Tablets" data-price="249">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Stretch Mark Cream</h3>
-            <p>Natural cream to prevent and reduce stretch marks</p>
-            <div class="price">₹449</div>
-            <button class="add-btn" onclick="addToCart('Stretch Mark Cream', 449)">Add to Cart</button>
-        </div>
+<!-- 3 -->
+<div class="product-card">
+  <h3>DHA Omega-3 Softgels</h3>
+  <p>Supports baby’s brain and eye development; third-trimester recommended dosage.</p>
+  <div class="price">₹549</div>
+  <button class="add-btn" data-name="DHA Omega-3 Softgels" data-price="549">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Maternity Belt</h3>
-            <p>Support belt to reduce back pain during pregnancy</p>
-            <div class="price">₹899</div>
-            <button class="add-btn" onclick="addToCart('Maternity Belt', 899)">Add to Cart</button>
-        </div>
+<!-- 4 -->
+<div class="product-card">
+  <h3>Iron + Folic Acid Combo</h3>
+  <p>Gentle iron formulation with folate to prevent pregnancy anemia and fatigue.</p>
+  <div class="price">₹369</div>
+  <button class="add-btn" data-name="Iron + Folic Acid Combo" data-price="369">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Iron Supplement</h3>
-            <p>Iron-rich supplement to prevent anemia</p>
-            <div class="price">₹349</div>
-            <button class="add-btn" onclick="addToCart('Iron Supplement', 349)">Add to Cart</button>
-        </div>
+<!-- 5 -->
+<div class="product-card">
+  <h3>Calcium + Vitamin D3 Tablets</h3>
+  <p>Bone health support for mother and fetal skeletal development.</p>
+  <div class="price">₹329</div>
+  <button class="add-btn" data-name="Calcium + Vitamin D3 Tablets" data-price="329">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Calcium Tablets</h3>
-            <p>Calcium supplements for bone health</p>
-            <div class="price">₹279</div>
-            <button class="add-btn" onclick="addToCart('Calcium Tablets', 279)">Add to Cart</button>
-        </div>
+<!-- 6 -->
+<div class="product-card">
+  <h3>Magnesium Citrate Capsules</h3>
+  <p>Helps reduce leg cramps and supports muscle function during pregnancy.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Magnesium Citrate Capsules" data-price="399">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Pregnancy Journal</h3>
-            <p>Beautiful journal to track your pregnancy journey</p>
-            <div class="price">₹399</div>
-            <button class="add-btn" onclick="addToCart('Pregnancy Journal', 399)">Add to Cart</button>
-        </div>
+<!-- 7 -->
+<div class="product-card">
+  <h3>Pregnancy Test Kit (Ultra Sensitivity)</h3>
+  <p>Early detection pregnancy kit with fast, accurate results (Pack of 2).</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Pregnancy Test Kit (Ultra Sensitivity)" data-price="199">Add to Cart</button>
+</div>
 
-        <div class="product-card">
-            <h3>Maternity Wear Set</h3>
-            <p>Comfortable and stylish maternity clothes (Set of 3)</p>
-            <div class="price">₹1,599</div>
-            <button class="add-btn" onclick="addToCart('Maternity Wear Set', 1599)">Add to Cart</button>
-        </div>
-    </div>
+<!-- 8 -->
+<div class="product-card">
+  <h3>Maternity Pillow - U Shape</h3>
+  <p>Full-body U-shaped pillow for belly, back and leg support for comfortable sleep.</p>
+  <div class="price">₹1,499</div>
+  <button class="add-btn" data-name="Maternity Pillow - U Shape" data-price="1499">Add to Cart</button>
+</div>
 
-    <div class="cart-summary">
-        <h2>Shopping Cart</h2>
-        <div id="cartItems" style="text-align: left; display: inline-block; max-width: 400px;">
-            <p id="emptyCart">Your cart is empty</p>
-        </div>
-        <div style="margin-top: 15px;">
-            <p id="cartTotal">Total: ₹0</p>
-            <button class="add-btn" onclick="checkout()" style="margin-top: 10px;">Proceed to Checkout</button>
-        </div>
-    </div>
-</main>
+<!-- 9 -->
+<div class="product-card">
+  <h3>Adjustable Maternity Support Belt</h3>
+  <p>Lower-back and abdominal support to relieve pressure and pain as belly grows.</p>
+  <div class="price">₹899</div>
+  <button class="add-btn" data-name="Adjustable Maternity Support Belt" data-price="899">Add to Cart</button>
+</div>
+
+<!-- 10 -->
+<div class="product-card">
+  <h3>Compression Maternity Socks</h3>
+  <p>Graduated compression socks to minimize swelling and improve circulation.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Compression Maternity Socks" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 11 -->
+<div class="product-card">
+  <h3>Anti-Stretch Mark Cream</h3>
+  <p>Hydrating cream with peptides &amp; vitamin E to prevent and reduce stretch marks.</p>
+  <div class="price">₹499</div>
+  <button class="add-btn" data-name="Anti-Stretch Mark Cream" data-price="499">Add to Cart</button>
+</div>
+
+<!-- 12 -->
+<div class="product-card">
+  <h3>Natural Stretch Mark Oil</h3>
+  <p>Cold-pressed oils that nourish and enhance skin elasticity during pregnancy.</p>
+  <div class="price">₹599</div>
+  <button class="add-btn" data-name="Natural Stretch Mark Oil" data-price="599">Add to Cart</button>
+</div>
+
+<!-- 13 -->
+<div class="product-card">
+  <h3>Gentle Pregnancy-Safe Body Wash</h3>
+  <p>Sulfate-free body wash formulated for sensitive, hormone-affected skin.</p>
+  <div class="price">₹349</div>
+  <button class="add-btn" data-name="Gentle Pregnancy-Safe Body Wash" data-price="349">Add to Cart</button>
+</div>
+
+<!-- 14 -->
+<div class="product-card">
+  <h3>Fragrance-Free Moisturizer</h3>
+  <p>Non-irritating daily face/body moisturizer safe for pregnancy skin.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Fragrance-Free Moisturizer" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 15 -->
+<div class="product-card">
+  <h3>Cooling Foot Relief Gel</h3>
+  <p>Soothes swollen, tired feet with menthol-free calming ingredients.</p>
+  <div class="price">₹259</div>
+  <button class="add-btn" data-name="Cooling Foot Relief Gel" data-price="259">Add to Cart</button>
+</div>
+
+<!-- 16 -->
+<div class="product-card">
+  <h3>Hemorrhoid Relief Ointment</h3>
+  <p>Topical soothing gel to reduce pain and itching associated with pregnancy hemorrhoids.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Hemorrhoid Relief Ointment" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 17 -->
+<div class="product-card">
+  <h3>Morning Sickness Acupressure Bands</h3>
+  <p>Wristbands applying gentle pressure to reduce nausea and vomiting.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Morning Sickness Acupressure Bands" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 18 -->
+<div class="product-card">
+  <h3>Ginger Chews (Nausea Relief)</h3>
+  <p>Natural ginger candy for fast relief from pregnancy-related nausea.</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Ginger Chews (Nausea Relief)" data-price="199">Add to Cart</button>
+</div>
+
+<!-- 19 -->
+<div class="product-card">
+  <h3>Prenatal Yoga Mat (Extra Thick)</h3>
+  <p>Non-slip, cushioned mat for prenatal exercises and pelvic floor strengthening.</p>
+  <div class="price">₹1,249</div>
+  <button class="add-btn" data-name="Prenatal Yoga Mat (Extra Thick)" data-price="1249">Add to Cart</button>
+</div>
+
+<!-- 20 -->
+<div class="product-card">
+  <h3>Pregnancy Support Pillow - Wedge</h3>
+  <p>Compact wedge pillow to support belly or back while sitting or sleeping.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Pregnancy Support Pillow - Wedge" data-price="699">Add to Cart</button>
+</div>
+
+<!-- 21 -->
+<div class="product-card">
+  <h3>Maternity Denim Overbump Jeans</h3>
+  <p>Comfortable expandable denim with soft over-bump panel for growing belly.</p>
+  <div class="price">₹1,299</div>
+  <button class="add-btn" data-name="Maternity Denim Overbump Jeans" data-price="1299">Add to Cart</button>
+</div>
+
+<!-- 22 -->
+<div class="product-card">
+  <h3>Soft Maternity Leggings</h3>
+  <p>High-waist stretch leggings for everyday comfort and movement.</p>
+  <div class="price">₹799</div>
+  <button class="add-btn" data-name="Soft Maternity Leggings" data-price="799">Add to Cart</button>
+</div>
+
+<!-- 23 -->
+<div class="product-card">
+  <h3>Nursing &amp; Maternity Bras Pack (2)</h3>
+  <p>Seamless, supportive bras suitable for late pregnancy and breastfeeding.</p>
+  <div class="price">₹899</div>
+  <button class="add-btn" data-name="Nursing & Maternity Bras Pack (2)" data-price="899">Add to Cart</button>
+</div>
+
+<!-- 24 -->
+<div class="product-card">
+  <h3>Disposable Nursing Breast Pads</h3>
+  <p>Super-absorbent pads to prevent leak-through and keep clothes dry post-delivery.</p>
+  <div class="price">₹279</div>
+  <button class="add-btn" data-name="Disposable Nursing Breast Pads" data-price="279">Add to Cart</button>
+</div>
+
+<!-- 25 -->
+<div class="product-card">
+  <h3>Silicone Nipple Shields (Pair)</h3>
+  <p>Helps with latch issues and sore nipples while breastfeeding.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Silicone Nipple Shields (Pair)" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 26 -->
+<div class="product-card">
+  <h3>Lactation Support Herbal Powder</h3>
+  <p>Galactagogues blend (fenugreek, fennel) to support milk supply after delivery.</p>
+  <div class="price">₹549</div>
+  <button class="add-btn" data-name="Lactation Support Herbal Powder" data-price="549">Add to Cart</button>
+</div>
+
+<!-- 27 -->
+<div class="product-card">
+  <h3>Breastfeeding Pillow (C-shape)</h3>
+  <p>Supports comfortable feeding positions for mother and baby.</p>
+  <div class="price">₹1,099</div>
+  <button class="add-btn" data-name="Breastfeeding Pillow (C-shape)" data-price="1099">Add to Cart</button>
+</div>
+
+<!-- 28 -->
+<div class="product-card">
+  <h3>Electric Breast Pump (Double)</h3>
+  <p>Efficient double pump with adjustable suction for expressing milk.</p>
+  <div class="price">₹6,499</div>
+  <button class="add-btn" data-name="Electric Breast Pump (Double)" data-price="6499">Add to Cart</button>
+</div>
+
+<!-- 29 -->
+<div class="product-card">
+  <h3>Manual Breast Pump</h3>
+  <p>Compact manual pump for occasional expressing on-the-go.</p>
+  <div class="price">₹1,199</div>
+  <button class="add-btn" data-name="Manual Breast Pump" data-price="1199">Add to Cart</button>
+</div>
+
+<!-- 30 -->
+<div class="product-card">
+  <h3>Breast Milk Storage Bags (Pack of 50)</h3>
+  <p>Pre-sterilized, leak-proof storage bags for expressed milk.</p>
+  <div class="price">₹799</div>
+  <button class="add-btn" data-name="Breast Milk Storage Bags (Pack of 50)" data-price="799">Add to Cart</button>
+</div>
+
+<!-- 31 -->
+<div class="product-card">
+  <h3>Digital Blood Pressure Monitor</h3>
+  <p>Home BP monitor with pregnancy-safe cuff to track hypertension risk.</p>
+  <div class="price">₹1,899</div>
+  <button class="add-btn" data-name="Digital Blood Pressure Monitor" data-price="1899">Add to Cart</button>
+</div>
+
+<!-- 32 -->
+<div class="product-card">
+  <h3>Fetal Doppler (Handheld)</h3>
+  <p>Portable device to listen to baby’s heartbeat from second trimester onwards.</p>
+  <div class="price">₹2,499</div>
+  <button class="add-btn" data-name="Fetal Doppler (Handheld)" data-price="2499">Add to Cart</button>
+</div>
+
+<!-- 33 -->
+<div class="product-card">
+  <h3>Kick Count Tracker Journal</h3>
+  <p>Simple journal to record daily baby movements and maternal notes.</p>
+  <div class="price">₹349</div>
+  <button class="add-btn" data-name="Kick Count Tracker Journal" data-price="349">Add to Cart</button>
+</div>
+
+<!-- 34 -->
+<div class="product-card">
+  <h3>Thermometer - Digital</h3>
+  <p>Quick-read, accurate digital thermometer suitable for mother and baby use.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Thermometer - Digital" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 35 -->
+<div class="product-card">
+  <h3>Pregnancy-Safe Sunscreen SPF50</h3>
+  <p>Mineral sunscreen (zinc oxide) safe for sensitive skin during pregnancy.</p>
+  <div class="price">₹599</div>
+  <button class="add-btn" data-name="Pregnancy-Safe Sunscreen SPF50" data-price="599">Add to Cart</button>
+</div>
+
+<!-- 36 -->
+<div class="product-card">
+  <h3>Scalp &amp; Hair Strengthening Serum</h3>
+  <p>Postpartum hair fall support with gentle, pregnancy-safe ingredients.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Scalp & Hair Strengthening Serum" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 37 -->
+<div class="product-card">
+  <h3>Iron-Rich Food Supplement (Chewable)</h3>
+  <p>Palatable chewable iron tablets for those who have trouble swallowing pills.</p>
+  <div class="price">₹329</div>
+  <button class="add-btn" data-name="Iron-Rich Food Supplement (Chewable)" data-price="329">Add to Cart</button>
+</div>
+
+<!-- 38 -->
+<div class="product-card">
+  <h3>Protein Powder - Pregnancy Blend</h3>
+  <p>Plant-based protein powder formulated for pregnancy nutritional needs.</p>
+  <div class="price">₹999</div>
+  <button class="add-btn" data-name="Protein Powder - Pregnancy Blend" data-price="999">Add to Cart</button>
+</div>
+
+<!-- 39 -->
+<div class="product-card">
+  <h3>High-Fiber Snack Bars (Constipation Relief)</h3>
+  <p>Fiber-rich, pregnancy-safe snacks to help maintain regularity.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="High-Fiber Snack Bars (Constipation Relief)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 40 -->
+<div class="product-card">
+  <h3>Perineal Care Spray</h3>
+  <p>Soothing antiseptic spray for perineal comfort during late pregnancy and postpartum.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Perineal Care Spray" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 41 -->
+<div class="product-card">
+  <h3>Maternity Nightwear Set</h3>
+  <p>Soft, breathable nightwear designed for comfort and easy nursing access.</p>
+  <div class="price">₹999</div>
+  <button class="add-btn" data-name="Maternity Nightwear Set" data-price="999">Add to Cart</button>
+</div>
+
+<!-- 42 -->
+<div class="product-card">
+  <h3>Pregnancy Journal &amp; Memory Book</h3>
+  <p>Guided prompts and space for ultrasound photos, appointments and thoughts.</p>
+  <div class="price">₹449</div>
+  <button class="add-btn" data-name="Pregnancy Journal & Memory Book" data-price="449">Add to Cart</button>
+</div>
+
+<!-- 43 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Toothpaste</h3>
+  <p>Non-fluoride option with gentle cleaning, safe for sensitive gums during pregnancy.</p>
+  <div class="price">₹179</div>
+  <button class="add-btn" data-name="Pregnancy-safe Toothpaste" data-price="179">Add to Cart</button>
+</div>
+
+<!-- 44 -->
+<div class="product-card">
+  <h3>Oral Rehydration Electrolyte Drink (Pregnancy)</h3>
+  <p>Electrolyte formulation to restore fluids during nausea or vomiting episodes.</p>
+  <div class="price">₹149</div>
+  <button class="add-btn" data-name="Oral Rehydration Electrolyte Drink (Pregnancy)" data-price="149">Add to Cart</button>
+</div>
+
+<!-- 45 -->
+<div class="product-card">
+  <h3>Maternity Swimwear</h3>
+  <p>Supportive, chlorine-resistant swimwear suitable for prenatal water exercise.</p>
+  <div class="price">₹1,099</div>
+  <button class="add-btn" data-name="Maternity Swimwear" data-price="1099">Add to Cart</button>
+</div>
+
+<!-- 46 -->
+<div class="product-card">
+  <h3>Pregnancy-Safe Insect Repellent</h3>
+  <p>DEET-free mosquito repellent formulation safe for expecting mothers.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Pregnancy-Safe Insect Repellent" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 47 -->
+<div class="product-card">
+  <h3>Medical Compression Leggings</h3>
+  <p>Strong compression leggings for varicose veins prevention and support.</p>
+  <div class="price">₹1,199</div>
+  <button class="add-btn" data-name="Medical Compression Leggings" data-price="1199">Add to Cart</button>
+</div>
+
+<!-- 48 -->
+<div class="product-card">
+  <h3>Maternity Robe with Wrap</h3>
+  <p>Soft robe ideal for hospital stays and postnatal comfort.</p>
+  <div class="price">₹899</div>
+  <button class="add-btn" data-name="Maternity Robe with Wrap" data-price="899">Add to Cart</button>
+</div>
+
+<!-- 49 -->
+<div class="product-card">
+  <h3>Hydrating Lip Balm - Pregnancy Safe</h3>
+  <p>Non-irritating lip care for dry lips caused by hormonal changes.</p>
+  <div class="price">₹149</div>
+  <button class="add-btn" data-name="Hydrating Lip Balm - Pregnancy Safe" data-price="149">Add to Cart</button>
+</div>
+
+<!-- 50 -->
+<div class="product-card">
+  <h3>Pregnancy Pillowcase (Removable)</h3>
+  <p>Extra pillowcase designed for maternity pillows, machine-washable cover.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Pregnancy Pillowcase (Removable)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 51 -->
+<div class="product-card">
+  <h3>Baby Name &amp; Planning Workbook</h3>
+  <p>Creative prompts and checklists for birth planning and naming ideas.</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Baby Name & Planning Workbook" data-price="199">Add to Cart</button>
+</div>
+
+<!-- 52 -->
+<div class="product-card">
+  <h3>Pregnancy Meditation &amp; Relaxation CD/Download</h3>
+  <p>Guided meditations for stress relief, sleep, and prenatal bonding.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Pregnancy Meditation & Relaxation CD/Download" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 53 -->
+<div class="product-card">
+  <h3>Pillow for Nursing Partner</h3>
+  <p>Small support pillow for partner comfort during labor or feeding sessions.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Pillow for Nursing Partner" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 54 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Essential Oil Blend (Aromatic, Non-topical)</h3>
+  <p>Diffuser-friendly blend designed for relaxation (consult doctor before use).</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Pregnancy-safe Essential Oil Blend (Aromatic, Non-topical)" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 55 -->
+<div class="product-card">
+  <h3>Silicone Scar Reduction Gel</h3>
+  <p>Postpartum scar care for C-section incisions (medical-grade silicone).</p>
+  <div class="price">₹499</div>
+  <button class="add-btn" data-name="Silicone Scar Reduction Gel" data-price="499">Add to Cart</button>
+</div>
+
+<!-- 56 -->
+<div class="product-card">
+  <h3>Maternity Compression Belly Band</h3>
+  <p>Light compression over abdominal area to reduce movement discomfort.</p>
+  <div class="price">₹599</div>
+  <button class="add-btn" data-name="Maternity Compression Belly Band" data-price="599">Add to Cart</button>
+</div>
+
+<!-- 57 -->
+<div class="product-card">
+  <h3>Pregnancy-Safe Hand Cream</h3>
+  <p>Non-irritating hand cream for dry, sensitive skin during pregnancy.</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Pregnancy-Safe Hand Cream" data-price="199">Add to Cart</button>
+</div>
+
+<!-- 58 -->
+<div class="product-card">
+  <h3>Maternity Activewear Set</h3>
+  <p>Breathable top and supportive leggings for prenatal workouts.</p>
+  <div class="price">₹1,499</div>
+  <button class="add-btn" data-name="Maternity Activewear Set" data-price="1499">Add to Cart</button>
+</div>
+
+<!-- 59 -->
+<div class="product-card">
+  <h3>Pregnancy-Safe Anti-Dandruff Shampoo</h3>
+  <p>Gentle scalp care safe for use in pregnancy (consult provider if needed).</p>
+  <div class="price">₹279</div>
+  <button class="add-btn" data-name="Pregnancy-Safe Anti-Dandruff Shampoo" data-price="279">Add to Cart</button>
+</div>
+
+<!-- 60 -->
+<div class="product-card">
+  <h3>Hydration Tracking Water Bottle</h3>
+  <p>Insulated bottle with time markers to remind you to stay hydrated.</p>
+  <div class="price">₹599</div>
+  <button class="add-btn" data-name="Hydration Tracking Water Bottle" data-price="599">Add to Cart</button>
+</div>
+
+<!-- 61 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Anti-chafing Balm</h3>
+  <p>Prevents skin irritation between thighs or under breasts as body changes.</p>
+  <div class="price">₹219</div>
+  <button class="add-btn" data-name="Pregnancy-safe Anti-chafing Balm" data-price="219">Add to Cart</button>
+</div>
+
+<!-- 62 -->
+<div class="product-card">
+  <h3>Waterproof Maternity Underwear (Pack of 3)</h3>
+  <p>Convenient, breathable underwear for heavy days or postpartum use.</p>
+  <div class="price">₹499</div>
+  <button class="add-btn" data-name="Waterproof Maternity Underwear (Pack of 3)" data-price="499">Add to Cart</button>
+</div>
+
+<!-- 63 -->
+<div class="product-card">
+  <h3>Back Support Lumbar Cushion</h3>
+  <p>Ergonomic cushion for office chairs to support lower back and posture.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Back Support Lumbar Cushion" data-price="699">Add to Cart</button>
+</div>
+
+<!-- 64 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Multipurpose Ointment</h3>
+  <p>All-rounder ointment for dry skin, cracked nipples (consult provider).</p>
+  <div class="price">₹349</div>
+  <button class="add-btn" data-name="Pregnancy-safe Multipurpose Ointment" data-price="349">Add to Cart</button>
+</div>
+
+<!-- 65 -->
+<div class="product-card">
+  <h3>Reusable Ice Pack for Swelling</h3>
+  <p>Flexible cold pack to reduce localized swelling and relieve pain.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Reusable Ice Pack for Swelling" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 66 -->
+<div class="product-card">
+  <h3>Perineal Massage Oil</h3>
+  <p>Lubricating oil to support perineal stretching and reduce tearing risk.</p>
+  <div class="price">₹449</div>
+  <button class="add-btn" data-name="Perineal Massage Oil" data-price="449">Add to Cart</button>
+</div>
+
+<!-- 67 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Sleep Spray (Pillow Mist)</h3>
+  <p>Mild aromatic mist to aid relaxation and sleep (non-inhalational, consult doctor).</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Pregnancy-safe Sleep Spray (Pillow Mist)" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 68 -->
+<div class="product-card">
+  <h3>Pregnancy Fitness Resistance Bands</h3>
+  <p>Low-impact resistance bands for safe prenatal strength training.</p>
+  <div class="price">₹399</div>
+  <button class="add-btn" data-name="Pregnancy Fitness Resistance Bands" data-price="399">Add to Cart</button>
+</div>
+
+<!-- 69 -->
+<div class="product-card">
+  <h3>Stretch Mark Prevention Vitamin C Serum</h3>
+  <p>Topical antioxidant serum to support collagen and skin repair (use as advised).</p>
+  <div class="price">₹499</div>
+  <button class="add-btn" data-name="Stretch Mark Prevention Vitamin C Serum" data-price="499">Add to Cart</button>
+</div>
+
+<!-- 70 -->
+<div class="product-card">
+  <h3>Pregnancy-Safe Deodorant (Natural)</h3>
+  <p>Aluminum-free, gentle deodorant formulated for sensitive hormonal skin.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Pregnancy-Safe Deodorant (Natural)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 71 -->
+<div class="product-card">
+  <h3>Hospital Bag Checklist &amp; Organizer</h3>
+  <p>Durable organizer with labeled compartments for hospital essentials.</p>
+  <div class="price">₹599</div>
+  <button class="add-btn" data-name="Hospital Bag Checklist & Organizer" data-price="599">Add to Cart</button>
+</div>
+
+<!-- 72 -->
+<div class="product-card">
+  <h3>Hands-Free Belly Support Sling</h3>
+  <p>Soft sling to carry light loads while reducing pressure on the abdomen.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Hands-Free Belly Support Sling" data-price="699">Add to Cart</button>
+</div>
+
+<!-- 73 -->
+<div class="product-card">
+  <h3>Prenatal Vitamin Gummies (Sugar-Free)</h3>
+  <p>Palatable gummies for those who dislike tablets; doctor-approved ingredients.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Prenatal Vitamin Gummies (Sugar-Free)" data-price="699">Add to Cart</button>
+</div>
+
+<!-- 74 -->
+<div class="product-card">
+  <h3>Postpartum Recovery Belly Binder</h3>
+  <p>Postnatal support garment to help abdominal recovery after delivery.</p>
+  <div class="price">₹1,199</div>
+  <button class="add-btn" data-name="Postpartum Recovery Belly Binder" data-price="1199">Add to Cart</button>
+</div>
+
+<!-- 75 -->
+<div class="product-card">
+  <h3>Handheld Massager (Low Intensity)</h3>
+  <p>Gentle massager to relieve back and shoulder tension (avoid abdomen).</p>
+  <div class="price">₹1,099</div>
+  <button class="add-btn" data-name="Handheld Massager (Low Intensity)" data-price="1099">Add to Cart</button>
+</div>
+
+<!-- 76 -->
+<div class="product-card">
+  <h3>Pregnancy-Friendly Multimineral Drops</h3>
+  <p>Liquid multimineral supplement for picky eaters or morning sickness sufferers.</p>
+  <div class="price">₹449</div>
+  <button class="add-btn" data-name="Pregnancy-Friendly Multimineral Drops" data-price="449">Add to Cart</button>
+</div>
+
+<!-- 77 -->
+<div class="product-card">
+  <h3>Silk Sleep Eye Mask (Breathable)</h3>
+  <p>Comfortable eye mask to improve sleep quality during pregnancy.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Silk Sleep Eye Mask (Breathable)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 78 -->
+<div class="product-card">
+  <h3>Compression Arm Sleeves (Maternity)</h3>
+  <p>Helps with swelling in arms and hands during late pregnancy.</p>
+  <div class="price">₹349</div>
+  <button class="add-btn" data-name="Compression Arm Sleeves (Maternity)" data-price="349">Add to Cart</button>
+</div>
+
+<!-- 79 -->
+<div class="product-card">
+  <h3>Pregnancy-safe Makeup Remover</h3>
+  <p>Gentle, oil-based remover that cleanses without harsh chemicals.</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Pregnancy-safe Makeup Remover" data-price="199">Add to Cart</button>
+</div>
+
+<!-- 80 -->
+<div class="product-card">
+  <h3>Lightweight Stroller (Travel-Friendly)</h3>
+  <p>Compact travel stroller suitable for newborns and easy for hospital trips.</p>
+  <div class="price">₹5,999</div>
+  <button class="add-btn" data-name="Lightweight Stroller (Travel-Friendly)" data-price="5999">Add to Cart</button>
+</div>
+
+<!-- 81 -->
+<div class="product-card">
+  <h3>Car Seat Adapter (Infant)</h3>
+  <p>Adapter to safely secure baby car seat to stroller frames for travel convenience.</p>
+  <div class="price">₹1,299</div>
+  <button class="add-btn" data-name="Car Seat Adapter (Infant)" data-price="1299">Add to Cart</button>
+</div>
+
+<!-- 82 -->
+<div class="product-card">
+  <h3>Pregnancy &amp; Baby Nutrition Cookbook</h3>
+  <p>Recipe collection focused on nutrient-dense meals for pregnancy and breastfeeding.</p>
+  <div class="price">₹499</div>
+  <button class="add-btn" data-name="Pregnancy & Baby Nutrition Cookbook" data-price="499">Add to Cart</button>
+</div>
+
+<!-- 83 -->
+<div class="product-card">
+  <h3>Organic Dates (Energy Snack)</h3>
+  <p>Natural, iron-rich dates ideal for energy boosts in pregnancy (small pack).</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Organic Dates (Energy Snack)" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 84 -->
+<div class="product-card">
+  <h3>Postpartum Sitz Bath Herbs Pack</h3>
+  <p>Herbal sitz bath mix to soothe perineal area after delivery.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Postpartum Sitz Bath Herbs Pack" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 85 -->
+<div class="product-card">
+  <h3>Breastfeeding Clothes Cover (Nursing Cover)</h3>
+  <p>Lightweight, breathable cover for discreet nursing in public.</p>
+  <div class="price">₹299</div>
+  <button class="add-btn" data-name="Breastfeeding Clothes Cover (Nursing Cover)" data-price="299">Add to Cart</button>
+</div>
+
+<!-- 86 -->
+<div class="product-card">
+  <h3>Portable White Noise Machine</h3>
+  <p>Helps mother relax and later soothes newborn sleep patterns.</p>
+  <div class="price">₹1,099</div>
+  <button class="add-btn" data-name="Portable White Noise Machine" data-price="1099">Add to Cart</button>
+</div>
+
+<!-- 87 -->
+<div class="product-card">
+  <h3>Pregnancy Education Book Bundle</h3>
+  <p>Set of guides: labor, breastfeeding, newborn care — ideal for first-time parents.</p>
+  <div class="price">₹799</div>
+  <button class="add-btn" data-name="Pregnancy Education Book Bundle" data-price="799">Add to Cart</button>
+</div>
+
+<!-- 88 -->
+<div class="product-card">
+  <h3>Silicone Food-Safe Spoon Set (Postpartum)</h3>
+  <p>Soft spoons ideal for easy feeding and minimal spillage during recovery.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Silicone Food-Safe Spoon Set (Postpartum)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 89 -->
+<div class="product-card">
+  <h3>Vitamin B6 Chewables (Nausea Support)</h3>
+  <p>Doctor-recommended vitamin B6 dose to help manage morning sickness symptoms.</p>
+  <div class="price">₹229</div>
+  <button class="add-btn" data-name="Vitamin B6 Chewables (Nausea Support)" data-price="229">Add to Cart</button>
+</div>
+
+<!-- 90 -->
+<div class="product-card">
+  <h3>Pregnancy Test Confirmation Service (Voucher)</h3>
+  <p>Voucher for clinical confirmation tests and basic prenatal bloodwork at partner labs.</p>
+  <div class="price">₹1,499</div>
+  <button class="add-btn" data-name="Pregnancy Test Confirmation Service (Voucher)" data-price="1499">Add to Cart</button>
+</div>
+
+<!-- 91 -->
+<div class="product-card">
+  <h3>Foam Roller (Gentle)</h3>
+  <p>Soft foam roller for gentle myofascial release and back care (avoid direct abdomen work).</p>
+  <div class="price">₹799</div>
+  <button class="add-btn" data-name="Foam Roller (Gentle)" data-price="799">Add to Cart</button>
+</div>
+
+<!-- 92 -->
+<div class="product-card">
+  <h3>Pregnancy Belly Binder (Lightweight)</h3>
+  <p>Offers comfortable, breathable support for daily activities.</p>
+  <div class="price">₹549</div>
+  <button class="add-btn" data-name="Pregnancy Belly Binder (Lightweight)" data-price="549">Add to Cart</button>
+</div>
+
+<!-- 93 -->
+<div class="product-card">
+  <h3>Anti-Nausea Herbal Tea (Caffeine-Free)</h3>
+  <p>Gentle tea blend with ginger and lemon balm to calm stomach upset.</p>
+  <div class="price">₹249</div>
+  <button class="add-btn" data-name="Anti-Nausea Herbal Tea (Caffeine-Free)" data-price="249">Add to Cart</button>
+</div>
+
+<!-- 94 -->
+<div class="product-card">
+  <h3>Pregnancy Glow Facial Mask (Hydrating)</h3>
+  <p>One-time hydrating mask formulated without retinoids or strong actives.</p>
+  <div class="price">₹199</div>
+  <button class="add-btn" data-name="Pregnancy Glow Facial Mask (Hydrating)" data-price="199">Add to Cart</button>
+</div>
+
+<!-- 95 -->
+<div class="product-card">
+  <h3>Therapeutic Heat Wrap (Back)</h3>
+  <p>Low-level heat wrap to ease back pain — use as recommended by provider.</p>
+  <div class="price">₹699</div>
+  <button class="add-btn" data-name="Therapeutic Heat Wrap (Back)" data-price="699">Add to Cart</button>
+</div>
+
+<!-- 96 -->
+<div class="product-card">
+  <h3>Portable Folding Stool (For Shower/Changing)</h3>
+  <p>Lightweight stool useful during pregnancy for safer mobility in the home.</p>
+  <div class="price">₹899</div>
+  <button class="add-btn" data-name="Portable Folding Stool (For Shower/Changing)" data-price="899">Add to Cart</button>
+</div>
+
+<!-- 97 -->
+<div class="product-card">
+  <h3>Pregnancy Glow Facial Oil (Non-comedogenic)</h3>
+  <p>Light oil to nourish dry patches without clogging pores; safe topical ingredients.</p>
+  <div class="price">₹449</div>
+  <button class="add-btn" data-name="Pregnancy Glow Facial Oil (Non-comedogenic)" data-price="449">Add to Cart</button>
+</div>
+
+<!-- 98 -->
+<div class="product-card">
+  <h3>Pregnancy Planner &amp; Appointment Organizer (Printable)</h3>
+  <p>Downloadable planner PDF with weekly trackers, appointments, and reminders.</p>
+  <div class="price">₹149</div>
+  <button class="add-btn" data-name="Pregnancy Planner & Appointment Organizer (Printable)" data-price="149">Add to Cart</button>
+</div>
+
+<!-- 99 -->
+<div class="product-card">
+  <h3>Vitamin K &amp; Hep B Information Pack (Vaccine Guide)</h3>
+  <p>Educational pamphlet and vaccine schedule guide for newborn immunizations.</p>
+  <div class="price">₹99</div>
+  <button class="add-btn" data-name="Vitamin K & Hep B Information Pack (Vaccine Guide)" data-price="99">Add to Cart</button>
+</div>
+
+<!-- 100 -->
+<div class="product-card">
+  <h3>New Parent Support Hotline Voucher (Counseling)</h3>
+  <p>Voucher for a session with certified maternal counselors and lactation consultants.</p>
+  <div class="price">₹1,999</div>
+  <button class="add-btn" data-name="New Parent Support Hotline Voucher (Counseling)" data-price="1999">Add to Cart</button>
+</div>
+
+    </main>
 
 <script>
-  // Initialize on page load
-  updateCartBadge();
-  updateCartDropdown();
-
-  // Cart icon click handler
+  // Attach placeholder images to each product and bind Add buttons to addToCart
   document.getElementById('cartIconBtn').addEventListener('click', function() {
     var dropdown = document.getElementById('cartDropdown');
     dropdown.classList.toggle('show');
@@ -210,8 +1000,15 @@
 
   function addToCart(productName, price) {
     var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
-    cart.push({ product: productName, price: price });
+    var itemId = Date.now().toString() + Math.random().toString(36).slice(2,8);
+    var item = { itemId: itemId, product: productName, price: price };
+    cart.push(item);
     localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    // try persisting to server; server will use sessionId or userId
+    fetch('/api/cart/add', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itemId: itemId, product: productName, price: price, qty: 1 })
+    }).catch(function(e){ console.warn('Cart sync (add) failed:', e); });
     updateCartBadge();
     updateCartDisplay();
     updateCartDropdown();
@@ -221,6 +1018,7 @@
   function updateCartBadge() {
     var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
     document.getElementById('cartBadge').textContent = cart.length;
+    try{ renderTopRightSummary(); }catch(e){}
   }
 
   function updateCartDropdown() {
@@ -237,25 +1035,44 @@
       return;
     }
 
+    // Group items by product name to show quantity
+    var grouped = {};
+    var itemIdMap = {}; // Map to track first itemId for each product
+    cart.forEach(function(item){
+      var key = (item.product || '').toString().trim().toLowerCase();
+      if(!grouped[key]) {
+        grouped[key] = { product: item.product, price: item.price, qty: 1, itemId: item.itemId };
+        itemIdMap[key] = item.itemId;
+      } else {
+        grouped[key].qty += 1;
+      }
+    });
+
     var html = '<div class="cart-grid">';
     var total = 0;
-    cart.forEach(function(item, index) {
+    Object.values(grouped).forEach(function(item) {
       html += '<div class="cart-item-card">';
-      html += '<strong>' + item.product + '</strong>';
-      html += '<div class="cart-item-card-price">₹' + item.price + '</div>';
-      html += '<button class="cart-item-remove" onclick="removeFromCartDropdown(' + index + ')">Remove</button>';
+      html += '<strong>' + item.product + (item.qty > 1 ? ' x ' + item.qty : '') + '</strong>';
+      html += '<div class="cart-item-card-price">₹' + (item.price * item.qty) + '</div>';
+      html += '<button class="cart-item-remove" onclick="removeFromCartDropdown(\'' + item.itemId + '\')">Remove</button>';
       html += '</div>';
-      total += item.price;
+      total += item.price * item.qty;
     });
     html += '</div>';
     itemsDiv.innerHTML = html;
     totalDiv.textContent = 'Total: ₹' + total;
+    try{ renderTopRightSummary(); }catch(e){}
   }
 
   function removeFromCartDropdown(index) {
+    // index is actually itemId here
+    var itemId = index;
     var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
-    cart.splice(index, 1);
+    cart = cart.filter(function(i){ return i.itemId !== itemId; });
     localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    // sync remove to server
+    fetch('/api/cart/remove', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ itemId: itemId }) })
+      .catch(function(e){ console.warn('Cart sync (remove) failed:', e); });
     updateCartBadge();
     updateCartDisplay();
     updateCartDropdown();
@@ -275,24 +1092,42 @@
     }
 
     emptyCartMsg.style.display = 'none';
+    
+    // Group items by product name to show quantity
+    var grouped = {};
+    var itemIdMap = {}; // Map to track first itemId for each product
+    cart.forEach(function(item){
+      var key = (item.product || '').toString().trim().toLowerCase();
+      if(!grouped[key]) {
+        grouped[key] = { product: item.product, price: item.price, qty: 1, itemId: item.itemId };
+        itemIdMap[key] = item.itemId;
+      } else {
+        grouped[key].qty += 1;
+      }
+    });
+
     var html = '<ul style="list-style: none; padding: 0;">';
     var total = 0;
-    cart.forEach(function(item, index) {
+    Object.values(grouped).forEach(function(item) {
       html += '<li style="padding: 5px 0; border-bottom: 1px solid #eee;">';
-      html += item.product + ' - ₹' + item.price;
-      html += ' <button onclick="removeFromCart(' + index + ')" style="background-color: #cc0000; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; float: right;">Remove</button>';
+      html += item.product + (item.qty > 1 ? ' x ' + item.qty : '') + ' - ₹' + (item.price * item.qty);
+      html += ' <button onclick="removeFromCart(\'' + item.itemId + '\')" style="background-color: #cc0000; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; float: right;">Remove</button>';
       html += '</li>';
-      total += item.price;
+      total += item.price * item.qty;
     });
     html += '</ul>';
     cartItemsDiv.innerHTML = html;
     cartTotalDiv.textContent = 'Total: ₹' + total;
+    try{ renderTopRightSummary(); }catch(e){}
   }
 
   function removeFromCart(index) {
+    var itemId = index;
     var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
-    cart.splice(index, 1);
+    cart = cart.filter(function(i){ return i.itemId !== itemId; });
     localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    fetch('/api/cart/remove', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ itemId: itemId }) })
+      .catch(function(e){ console.warn('Cart sync (remove) failed:', e); });
     updateCartBadge();
     updateCartDisplay();
     updateCartDropdown();
@@ -308,7 +1143,239 @@
     // Here you can add payment gateway integration
   }
 
-  // Initialize cart display on page load
+  // Sync localStorage cart with server on page load
+  function syncFromServer(){
+    fetch('/api/cart').then(function(res){ return res.json(); }).then(function(data){
+      var serverItems = (data && Array.isArray(data.items)) ? data.items.map(function(i){ return { itemId: i.itemId, product: i.product, price: i.price, qty: i.qty || 1 }; }) : [];
+      var local = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+
+      // Merge strategy: union by product name, sum qty when duplicate
+      if(serverItems.length === 0 && local.length > 0){
+        // push local to server
+        local.forEach(function(it){
+          fetch('/api/cart/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(it) }).catch(function(e){console.warn(e);});
+        });
+        updateCartBadge(); updateCartDisplay(); updateCartDropdown();
+        return;
+      }
+
+      if(serverItems.length > 0 && local.length === 0){
+        localStorage.setItem('shoppingCart', JSON.stringify(serverItems));
+        updateCartBadge(); updateCartDisplay(); updateCartDropdown();
+        return;
+      }
+
+      // both non-empty -> merge
+      if(serverItems.length > 0 && local.length > 0){
+        var map = {};
+        serverItems.concat(local).forEach(function(it){
+          var key = (it.product || '').toString().trim().toLowerCase();
+          if(!map[key]) map[key] = { itemId: it.itemId || ('i'+(Math.random()*1e9|0)), product: it.product, price: Number(it.price||0), qty: Number(it.qty||1) };
+          else map[key].qty = (map[key].qty || 0) + (Number(it.qty||1));
+        });
+        var merged = Object.keys(map).map(function(k){ return map[k]; });
+        // Replace server cart with merged: clear then add items
+        fetch('/api/cart/clear', { method: 'POST' }).then(function(){
+          merged.forEach(function(it){ fetch('/api/cart/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ itemId: it.itemId, product: it.product, price: it.price, qty: it.qty }) }).catch(function(e){console.warn(e);});
+          });
+        }).catch(function(e){ console.warn('Failed clearing server cart', e); });
+        localStorage.setItem('shoppingCart', JSON.stringify(merged));
+        updateCartBadge(); updateCartDisplay(); updateCartDropdown();
+        return;
+      }
+
+    }).catch(function(e){ console.warn('Cart sync failed', e); });
+  }
+
+</script>
+
+<script>
+  function attachProductImagesAndBind(){
+    var cards = document.querySelectorAll('#productsGrid .product-card');
+    cards.forEach(function(card, idx){
+      var nameEl = card.querySelector('h3');
+      var name = nameEl ? nameEl.textContent.trim() : ('Product ' + (idx+1));
+      var priceEl = card.querySelector('.price');
+      var price = 0;
+      if(priceEl){ price = parseInt((priceEl.textContent||'').replace(/[^0-9]/g,'')) || 0; }
+
+      // add placeholder image if none
+      if(!card.querySelector('img.product-img')){
+        var img = document.createElement('img');
+        img.className = 'product-img';
+        // Use Unsplash source for nicer placeholder images, fallback to via.placeholder
+        try {
+          var query = encodeURIComponent(name.split(' ').slice(0,3).join(','));
+          img.src = 'https://source.unsplash.com/400x250/?' + query;
+        } catch(e){
+          img.src = 'https://via.placeholder.com/400x250?text=' + encodeURIComponent(name);
+        }
+        img.alt = name;
+        img.style.width = '100%';
+        img.style.height = '160px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '6px';
+        img.style.marginBottom = '10px';
+        card.insertBefore(img, card.firstChild);
+      }
+
+      var btn = card.querySelector('button.add-btn');
+      if(btn){
+        if(!btn.dataset.name) btn.dataset.name = name;
+        if(!btn.dataset.price) btn.dataset.price = price;
+        // avoid double-binding by checking a marker
+        if(!btn.dataset.bound){
+          btn.addEventListener('click', function(){ addToCart(btn.dataset.name, parseInt(btn.dataset.price)); });
+          btn.dataset.bound = '1';
+        }
+      }
+    });
+  }
+
+  // Initialize cart display, bind product buttons and sync with server
+  // Bill button state: summary hidden until bill button opens it
+  var billOpened = false;
+
+  // Top-right cart summary renderer + checkout handler
+  function renderTopRightSummary(){
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    var container = document.getElementById('cartSummaryTopRight');
+    var list = document.getElementById('cartSummaryList');
+    var totalDiv = document.getElementById('cartSummaryTotal');
+    if(!container || !list || !totalDiv) return;
+
+    // Group items by product name
+    var grouped = {};
+    cart.forEach(function(item){
+      var key = (item.product || '').toString().trim().toLowerCase();
+      if(!grouped[key]) grouped[key] = { ...item, qty: 1 };
+      else grouped[key].qty += 1;
+    });
+
+    var html = '';
+    var total = 0;
+    Object.values(grouped).forEach(function(item){
+      html += '<div class="item-line">';
+      html += '<div class="name">' + item.product + (item.qty > 1 ? ' x ' + item.qty : '') + '</div>';
+      html += '<div style="display:flex; gap:8px; align-items:center;">';
+      html += '<div class="price">₹' + (item.price * item.qty) + '</div>';
+      html += '<button style="background:#cc0000;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;" onclick="removeFromCart(\'' + item.itemId + '\')">Remove</button>';
+      html += '</div>';
+      html += '</div>';
+      total += item.price * item.qty;
+    });
+    list.innerHTML = html || '<div class="empty">No items in cart</div>';
+    totalDiv.textContent = 'Total: ₹' + total;
+    var proceedBtn = document.getElementById('proceedCheckoutBtn'); if(proceedBtn) proceedBtn.style.display = billOpened ? 'inline-block' : 'none';
+  }
+
+  function handleProceedCheckout(){
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    if(cart.length === 0){ alert('Your cart is empty!'); return; }
+    var btn = document.getElementById('proceedCheckoutBtn');
+    if(btn) btn.disabled = true;
+    fetch('/api/checkout', { method: 'POST' }).then(function(res){ return res.json(); }).then(function(data){
+      if(data && data.success){
+        alert('Order placed successfully! Order ID: ' + (data.orderId || 'N/A'));
+        // clear client cart
+        localStorage.removeItem('shoppingCart');
+        updateCartBadge(); updateCartDisplay(); updateCartDropdown();
+        // hide summary
+        var container = document.getElementById('cartSummaryTopRight'); if(container) container.style.display = 'none';
+        // reset billOpened so checkout hides until user opens Bill again
+        billOpened = false;
+      } else {
+        alert('Checkout failed. Please try again.');
+      }
+    }).catch(function(e){ console.warn('Checkout error', e); alert('Checkout error. See console.'); }).finally(function(){ if(btn) btn.disabled = false; });
+  }
+
+  // bind proceed button
+  try{ document.getElementById('proceedCheckoutBtn').addEventListener('click', handleProceedCheckout); }catch(e){}
+
+  // Bill button toggles visibility of the floating summary; Proceed button is shown only when billOpened is true
+  try{
+    var billBtnEl = document.getElementById('billBtn');
+    if(billBtnEl){
+      billBtnEl.addEventListener('click', function(){
+        openBillModal();
+      });
+    }
+  }catch(e){}
+
+  // Bill modal functions
+  function openBillModal(){
+    var cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    if(cart.length === 0){
+      alert('Your cart is empty!');
+      return;
+    }
+    
+    // Group items by product name
+    var grouped = {};
+    cart.forEach(function(item){
+      var key = (item.product || '').toString().trim().toLowerCase();
+      if(!grouped[key]) {
+        grouped[key] = { product: item.product, price: item.price, qty: 1, itemId: item.itemId };
+      } else {
+        grouped[key].qty += 1;
+      }
+    });
+    
+    // Generate bill table
+    var billItemsDiv = document.getElementById('billItems');
+    var html = '';
+    var total = 0;
+    Object.values(grouped).forEach(function(item){
+      var itemTotal = item.price * item.qty;
+      html += '<tr style="border-bottom:1px solid #eee;">';
+      html += '<td style="padding:10px; text-align:left;">' + item.product + '</td>';
+      html += '<td style="padding:10px; text-align:center; font-weight:bold;">' + item.qty + '</td>';
+      html += '<td style="padding:10px; text-align:center;">₹' + item.price + '</td>';
+      html += '<td style="padding:10px; text-align:right; color:#28a745; font-weight:bold;">₹' + itemTotal + '</td>';
+      html += '</tr>';
+      total += itemTotal;
+    });
+    billItemsDiv.innerHTML = html;
+    document.getElementById('billGrandTotal').textContent = '₹' + total;
+    
+    // Show bill modal
+    document.getElementById('billModal').style.display = 'block';
+  }
+
+  function closeBillModal(){
+    document.getElementById('billModal').style.display = 'none';
+  }
+
+  function printBill(){
+    var billContent = document.getElementById('billModal').innerHTML;
+    var printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write('<html><head><title>Bill</title><style>');
+    printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
+    printWindow.document.write('table { width: 100%; border-collapse: collapse; margin: 20px 0; }');
+    printWindow.document.write('th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }');
+    printWindow.document.write('th { background-color: #ffcccc; font-weight: bold; }');
+    printWindow.document.write('h2 { color: #cc0000; }');
+    printWindow.document.write('</style></head><body>');
+    printWindow.document.write('<h2>Pregnancy Care Shopping - Bill</h2>');
+    printWindow.document.write(billContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+  }
+
+  // Close bill modal when clicking outside
+  window.addEventListener('click', function(event){
+    var billModal = document.getElementById('billModal');
+    if(event.target === billModal){
+      closeBillModal();
+    }
+  });
+
+  attachProductImagesAndBind();
+  syncFromServer();
+  updateCartBadge();
+  updateCartDropdown();
   updateCartDisplay();
 </script>
 

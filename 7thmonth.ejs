@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seventh Month - Pregnancy Care</title>
+  <style>
+    /* Reset & body */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Arial', sans-serif; background: #f9f9f9; color: #333; line-height: 1.6; }
+
+    /* Header */
+    header { 
+      background: linear-gradient(90deg, #ffcccc, #ff9999); 
+      padding: 15px 30px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { font-size: 22px; font-weight: bold; color: #333; }
+    .top-right a { 
+      text-decoration: none; 
+      padding: 8px 14px; 
+      background: #ff6666; 
+      color: #fff; 
+      border-radius: 6px; 
+      font-weight: 500; 
+      transition: 0.3s;
+    }
+    .top-right a:hover { background: #e60000; }
+
+    /* Main container */
+    main { 
+      max-width: 900px; 
+      margin: 40px auto; 
+      padding: 20px; 
+      background: #fff; 
+      border-radius: 12px; 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+    h1 { color: #cc0000; text-align: center; margin-bottom: 30px; font-size: 28px; }
+
+    /* Section cards */
+    .section { 
+      border-left-width: 6px; 
+      border-left-style: solid; 
+      padding: 20px 25px;
+      margin: 30px 0;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    /* Section headings */
+    h2 { margin-top: 0; font-size: 22px; }
+    h4 { margin-bottom: 10px; font-size: 18px; }
+
+    /* Lists */
+    ul { list-style: none; padding-left: 0; }
+    li { padding: 5px 0; font-size: 15px; }
+    li::before { content: "•"; color: #ff6666; display: inline-block; width: 1em; margin-left: -1em; }
+
+    /* Highlight notes */
+    p strong { display: block; margin-top: 12px; }
+
+    /* Responsive grid */
+    @media (max-width: 700px) {
+      .grid-2 { display: block !important; }
+    }
+
+    /* Color-coded sections */
+    .diet { border-left-color: #ff9800; background: #fff8e1; }
+    .exercise { border-left-color: #2196f3; background: #e3f2fd; }
+    .body-changes { border-left-color: #8bc34a; background: #f1f8e9; }
+    .checkups { border-left-color: #00bcd4; background: #e0f2f1; }
+    .swelling { border-left-color: #9c27b0; background: #f3e5f5; }
+    .mental { border-left-color: #e91e63; background: #fce4ec; }
+    .hygiene { border-left-color: #9c27b0; background: #f3e5f5; }
+    .emergency { border-left-color: #d32f2f; background: #ffe6e6; }
+    .family { border-left-color: #1565c0; background: #e6f3ff; }
+
+    /* Emojis style */
+    h2::before, h1::before { margin-right: 6px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Pregnancy Care</div>
+  <div class="top-right">
+    <% if(name){ %>
+      <a href="/precautions">Back</a>
+    <% } else { %>
+      <a href="/">Home</a>
+    <% } %>
+  </div>
+</header>
+
+<main>
+  <h1>🌷 Seventh Month of Pregnancy (Weeks 25–28)</h1>
+  <p><strong>Welcome to the 3rd Trimester! Baby's brain, lungs, and senses develop quickly. Baby responds to sounds and light, and growth becomes faster.</strong></p>
+
+  <!-- Diet Precautions -->
+  <div class="section diet grid-2">
+    <div>
+      <h4 style="color: #4caf50; border-bottom: 2px solid #4caf50; padding-bottom: 8px;">✔ Include:</h4>
+      <ul>
+        <li>🌿 Iron foods: leafy vegetables, beetroot, dates, jaggery</li>
+        <li>🍳 Protein: eggs, fish, dal, milk, paneer</li>
+        <li>🥛 Calcium: milk, curd, ragi, sesame seeds</li>
+        <li>🍊 Vitamin C fruits for iron absorption: orange, guava</li>
+        <li>🌾 Whole grains for energy</li>
+        <li>💧 Drink 3–3.5 liters water per day</li>
+        <li>🍽️ Small meals 5–6 times → prevents acidity</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color: #f44336; border-bottom: 2px solid #f44336; padding-bottom: 8px;">🚫 Avoid:</h4>
+      <ul>
+        <li>Junk food, bakery, deep-fried foods</li>
+        <li>Too much coffee/tea → reduce to 1 cup max</li>
+        <li>Very salty snacks → increases swelling</li>
+        <li>Unripe papaya/pineapple</li>
+      </ul>
+    </div>
+    <p><strong>📌 Continue iron + calcium supplements everyday</strong></p>
+  </div>
+
+  <!-- Physical Activity -->
+  <div class="section exercise grid-2">
+    <div>
+      <h4 style="color: #4caf50;">✔ Do:</h4>
+      <ul>
+        <li>30–40 mins daily walking</li>
+        <li>Prenatal yoga for flexibility</li>
+        <li>Kegel exercises for smooth delivery</li>
+        <li>Use pregnancy belt if back pain is high</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color: #f44336;">🚫 Avoid:</h4>
+      <ul>
+        <li>Heavy work like lifting buckets or gas cylinder</li>
+        <li>Sleeping straight on back</li>
+        <li>Long-distance travel or bike rides</li>
+        <li>Climbing stairs too fast</li>
+      </ul>
+    </div>
+    <p><strong>📌 Use pillow behind back & between legs while sleeping</strong></p>
+  </div>
+
+  <!-- Normal Body Changes -->
+  <div class="section body-changes">
+    <h2>🤰 Normal Body Changes This Month</h2>
+    <ul>
+      <li>💪 Baby movements strong & frequent</li>
+      <li>🤕 Back pain increases</li>
+      <li>😴 Trouble sleeping</li>
+      <li>😮‍💨 Mild breathlessness</li>
+      <li>💧 Swelling in feet/ankles</li>
+      <li>🥛 Leaking milk drops from breasts (normal)</li>
+    </ul>
+    <p><strong>➡ These changes are common in 7th month</strong></p>
+  </div>
+
+  <!-- Medical Checkups -->
+  <div class="section checkups">
+    <h2>🩺 Medical Checkups in 7th Month</h2>
+    <ul>
+      <li>✔ Growth scan / ultrasound (baby weight, placenta position)</li>
+      <li>✔ Gestational diabetes test results review</li>
+      <li>✔ BP check at every visit</li>
+      <li>✔ Hemoglobin monitoring</li>
+      <li>✔ Anti-D injection if mother is Rh-negative (doctor will advise)</li>
+    </ul>
+    <p><strong>📌 Track baby kicks — 10+ movements/day is normal</strong></p>
+  </div>
+
+  <!-- Swelling & Leg Care -->
+  <div class="section swelling">
+    <h2>🦶 Swelling & Leg Cramps Care</h2>
+    <ul>
+      <li>✔ Keep legs elevated</li>
+      <li>✔ Wear comfortable footwear</li>
+      <li>✔ Massage legs with warm oil</li>
+      <li>✔ Avoid sitting/standing for long time</li>
+      <li>🚫 Do not sleep without pillow support</li>
+    </ul>
+  </div>
+
+  <!-- Mental Health -->
+  <div class="section mental">
+    <h2>🧠 Mental & Emotional Care</h2>
+    <ul>
+      <li>✔ Talk & bond with baby</li>
+      <li>✔ Practice relaxation breathing</li>
+      <li>✔ Positive feelings → baby responds too!</li>
+      <li>🚫 Avoid stress, arguments, negative thoughts</li>
+    </ul>
+  </div>
+
+  <!-- Hygiene -->
+  <div class="section hygiene">
+    <h2>🪥 Hygiene & Infection Prevention</h2>
+    <ul>
+      <li>✔ Use cotton undergarments</li>
+      <li>✔ Change pads if vaginal discharge more</li>
+      <li>✔ Take bath daily</li>
+      <li>✔ Drink enough water to avoid urinary infection</li>
+      <li>🚫 Avoid fragrances/chemicals around private area</li>
+    </ul>
+  </div>
+
+  <!-- Emergency Symptoms -->
+  <div class="section emergency">
+    <h2>❌ Emergency Symptoms — Doctor Visit Immediately</h2>
+    <ul style="color:#c62828;">
+      <li>😴 Reduced / No baby movements</li>
+      <li>🩸 Bleeding or water leakage</li>
+      <li>😣 Severe stomach cramps</li>
+      <li>🤕 Severe headache with blurred vision</li>
+      <li>💧 Sudden swelling in face/hands</li>
+      <li>🤒 High fever</li>
+      <li>🤢 Persistent vomiting</li>
+      <li>🚽 Pain while urinating</li>
+    </ul>
+    <p><strong>➡ These could indicate preterm labor or complications</strong></p>
+  </div>
+
+  <!-- Family Support -->
+  <div class="section family">
+    <h2>❤️ Family Support Tips</h2>
+    <ul>
+      <li>💙 Help mother with daily household chores</li>
+      <li>💙 Give emotional support and ensure proper rest</li>
+      <li>💙 Encourage regular meals and walking</li>
+      <li>💙 Keep home peaceful and stress-free</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>
